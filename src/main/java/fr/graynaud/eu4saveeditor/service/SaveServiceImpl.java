@@ -4,17 +4,16 @@ import fr.graynaud.eu4saveeditor.common.Constants;
 import fr.graynaud.eu4saveeditor.common.FileUtils;
 import fr.graynaud.eu4saveeditor.common.Keys;
 import fr.graynaud.eu4saveeditor.common.SaveFile;
+import fr.graynaud.eu4saveeditor.controller.object.DataObject;
 import fr.graynaud.eu4saveeditor.service.object.DataIndex;
 import fr.graynaud.eu4saveeditor.service.object.data.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -46,6 +45,20 @@ public class SaveServiceImpl implements SaveService {
         }
 
         return data;
+    }
+
+    @Override
+    public void dataToSave(DataObject dataObject, OutputStream outputStream) throws IOException {
+        int indent = 0;
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(Constants.STARTING_TEXT).append("\n");
+
+        dataObject.getData().forEach(data -> {
+            stringBuilder.append(data.toSave(indent));
+        });
+
+        FileUtils.zipData(outputStream, Collections.singletonMap(SaveFile.META, stringBuilder.toString().trim()));
     }
 
     private DataIndex getValue(String content) {
@@ -163,7 +176,7 @@ public class SaveServiceImpl implements SaveService {
                 index += 2;
                 subIndex = new AtomicInteger();
                 dataContent = content.substring(index, index + getEndOfObject(content.substring(index)));
-                List<AbstractData> subData = new ArrayList<>();
+                List<ObjectData> subData = new ArrayList<>();
                 index += dataContent.length();
 
                 Arrays.stream(dataContent.substring(1, dataContent.length() - 2).split("}\n\\{+"))

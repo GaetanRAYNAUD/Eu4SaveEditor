@@ -17,6 +17,6 @@ public class ListStringData extends AbstractData<List<String>> {
 
         stringBuilder.append("\t".repeat(indent)).append("}\n");
 
-        return stringBuilder.toString().trim();
+        return stringBuilder.toString();
     }
 }

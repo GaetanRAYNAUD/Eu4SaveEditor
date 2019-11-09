@@ -2,9 +2,9 @@ package fr.graynaud.eu4saveeditor.service.object.data;
 
 import java.util.List;
 
-public class ListObjectData extends AbstractData<List<AbstractData>> {
+public class ListObjectData extends AbstractData<List<ObjectData>> {
 
-    public ListObjectData(String key, List<AbstractData> value) {
+    public ListObjectData(String key, List<ObjectData> value) {
         super(DataType.LIST_OBJECTS, key, value);
     }
 
@@ -15,8 +15,8 @@ public class ListObjectData extends AbstractData<List<AbstractData>> {
 
         this.value.forEach(data -> {
             stringBuilder.append("\t".repeat(indent)).append("{\n");
-            stringBuilder.append(data.toSave(indent + 1));
-            stringBuilder.append("\t".repeat(indent)).append("}\n");
+            stringBuilder.append(data.toSave(indent + 1, false));
+            stringBuilder.append("\t".repeat(indent + 1)).append("}\n");
         });
 
         stringBuilder.append("\t".repeat(indent)).append("}\n");

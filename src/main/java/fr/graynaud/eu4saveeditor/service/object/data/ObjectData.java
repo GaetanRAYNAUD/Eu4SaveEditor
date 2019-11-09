@@ -10,12 +10,21 @@ public class ObjectData extends AbstractData<List<AbstractData>> {
 
     @Override
     public String toSave(Integer indent) {
+        return toSave(indent, true);
+    }
+
+    public String toSave(Integer indent, boolean printKey) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\t".repeat(indent)).append(this.key).append("={\n");
 
-        this.value.forEach(data -> stringBuilder.append("\t".repeat(indent)).append(data.toSave(indent + 1)));
+        if (printKey) {
+            stringBuilder.append("\t".repeat(indent)).append(this.key).append("={\n");
+        }
 
-        stringBuilder.append("\t".repeat(indent)).append("}\n");
+        this.value.forEach(data -> stringBuilder.append(data.toSave(indent + 1)));
+
+        if (printKey) {
+            stringBuilder.append("\t".repeat(indent)).append("}\n");
+        }
 
         return stringBuilder.toString();
     }

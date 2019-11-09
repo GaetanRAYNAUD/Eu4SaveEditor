@@ -6,12 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RestController
@@ -28,6 +26,15 @@ public class Controller {
 
     @PostMapping("/parse")
     public ResponseEntity parse(@RequestPart("save") MultipartFile save) throws IOException {
-        return new ResponseEntity<>(new DataObject(saveService.saveToData(save)), HttpStatus.OK);
+        return new ResponseEntity<>(new DataObject(save.getOriginalFilename(), saveService.saveToData(save)), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/convert", produces= "application/zip")
+    public void convert(@RequestBody DataObject dataObject, HttpServletResponse response) throws IOException {
+        response.setContentType("application/zip");
+        response.setHeader("Content-Disposition", "attachment; filename=edited_" + dataObject.getFileName());
+
+        saveService.dataToSave(dataObject, response.getOutputStream());
+        response.getOutputStream().flush();
     }
 }

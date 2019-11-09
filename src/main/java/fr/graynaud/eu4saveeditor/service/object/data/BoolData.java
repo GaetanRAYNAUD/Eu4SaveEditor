@@ -8,6 +8,6 @@ public class BoolData extends AbstractData<Boolean> {
 
     @Override
     public String toSave(Integer indent) {
-        return "\t".repeat(indent) + this.key + "=" + (this.value ? "yes" : "no") + "}\n";
+        return "\t".repeat(indent) + this.key + "=" + (this.value ? "yes" : "no") + "\n";
     }
 }
