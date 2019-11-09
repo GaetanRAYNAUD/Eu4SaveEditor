@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 @Service
 public class SaveServiceImpl implements SaveService {
 
+    private static final int MAX_TRY = 1000;
+
     @Override
     public List<AbstractData> saveToData(MultipartFile multipartFile) throws IOException {
         List<AbstractData> data = new ArrayList<>();
@@ -36,9 +38,9 @@ public class SaveServiceImpl implements SaveService {
 
         content = content.trim();
 
-        while (index < content.length() && tryy < 100) {
+        while (index < content.length() && tryy < MAX_TRY) {
             tryy++;
-            DataIndex dataIndex = getValue(content.substring(index), 0);
+            DataIndex dataIndex = getValue(content.substring(index));
             data.add(dataIndex.getData());
             index += dataIndex.getIndex();
         }
@@ -46,7 +48,8 @@ public class SaveServiceImpl implements SaveService {
         return data;
     }
 
-    private DataIndex getValue(String content, int index) {
+    private DataIndex getValue(String content) {
+        int index = 0;
         int fixIndex = 0;
         if (content.startsWith("}\n") || content.startsWith("{\n")) {
             content = content.substring(2);
@@ -134,9 +137,9 @@ public class SaveServiceImpl implements SaveService {
                         int tryy = 0;
                         List<AbstractData> subData = new ArrayList<>();
 
-                        while (subIndex.get() < dataContent.length() && tryy < 100) {
+                        while (subIndex.get() < dataContent.length() && tryy < MAX_TRY) {
                             tryy++;
-                            DataIndex dataIndex = getValue(dataContent.substring(subIndex.get()), 0);
+                            DataIndex dataIndex = getValue(dataContent.substring(subIndex.get()));
                             subData.add(dataIndex.getData());
                             subIndex.addAndGet(dataIndex.getIndex());
                         }
@@ -169,9 +172,9 @@ public class SaveServiceImpl implements SaveService {
                           int subSubIndex = 0;
                           List<AbstractData> subSubData = new ArrayList<>();
 
-                          while (subSubIndex < object.trim().length() && tryyy < 100) {
+                          while (subSubIndex < object.trim().length() && tryyy < MAX_TRY) {
                               tryyy++;
-                              DataIndex dataIndex = getValue(object.substring(subSubIndex), 0);
+                              DataIndex dataIndex = getValue(object.substring(subSubIndex));
                               subSubData.add(dataIndex.getData());
                               subSubIndex += dataIndex.getIndex();
                           }
