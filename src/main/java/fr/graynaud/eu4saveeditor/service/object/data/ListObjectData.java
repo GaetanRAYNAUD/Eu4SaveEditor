@@ -23,4 +23,9 @@ public class ListObjectData extends AbstractData<List<ObjectData>> {
 
         return stringBuilder.toString();
     }
+
+    @Override
+    public Boolean isValueValid() {
+        return this.value != null && !this.value.isEmpty() && this.value.stream().anyMatch(AbstractData::isValueValid);
+    }
 }

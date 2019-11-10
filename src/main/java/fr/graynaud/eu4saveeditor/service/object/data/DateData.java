@@ -14,4 +14,9 @@ public class DateData extends AbstractData<LocalDate> {
     public String toSave(Integer indent) {
         return "\t".repeat(indent) + this.key + "=" + this.value.format(Constants.DATE_FORMAT) + "\n";
     }
+
+    @Override
+    public Boolean isValueValid() {
+        return this.value != null;
+    }
 }

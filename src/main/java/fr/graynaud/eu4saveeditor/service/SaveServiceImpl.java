@@ -2,7 +2,6 @@ package fr.graynaud.eu4saveeditor.service;
 
 import fr.graynaud.eu4saveeditor.common.Constants;
 import fr.graynaud.eu4saveeditor.common.FileUtils;
-import fr.graynaud.eu4saveeditor.common.Keys;
 import fr.graynaud.eu4saveeditor.common.SaveFile;
 import fr.graynaud.eu4saveeditor.controller.object.DataObject;
 import fr.graynaud.eu4saveeditor.service.object.DataIndex;
@@ -15,53 +14,71 @@ import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
 public class SaveServiceImpl implements SaveService {
 
-    private static final int MAX_TRY = 1000;
+    private static final int MAX_TRY = 10000;
 
     @Override
-    public List<AbstractData> saveToData(MultipartFile multipartFile) throws IOException {
-        List<AbstractData> data = new ArrayList<>();
+    public DataObject saveToData(MultipartFile multipartFile) throws IOException {
+        AtomicInteger attempts = new AtomicInteger();
         Map<SaveFile, String> filesContent = FileUtils.unZipSave(multipartFile);
-        int index = 0;
-        int tryy = 0;
+        DataObject dataObject = new DataObject();
 
-        String content = filesContent.get(SaveFile.META);
+        filesContent.forEach((saveFile, content) -> {
+            if (saveFile == SaveFile.GAMESTATE) {
+                return;
+            }
 
-        if (content.startsWith(Constants.STARTING_TEXT)) {
-            content = content.substring(Constants.STARTING_TEXT.length());
-        }
+            int index = 0;
+            attempts.set(0);
+            List<AbstractData> data = new ArrayList<>();
 
-        content = content.trim();
+            if (content.startsWith(Constants.STARTING_TEXT)) {
+                content = content.substring(Constants.STARTING_TEXT.length());
+            }
 
-        while (index < content.length() && tryy < MAX_TRY) {
-            tryy++;
-            DataIndex dataIndex = getValue(content.substring(index));
-            data.add(dataIndex.getData());
-            index += dataIndex.getIndex();
-        }
+            content = content.trim();
 
-        return data;
+            while (index < content.length() && attempts.getAndAdd(1) < MAX_TRY) {
+                DataIndex dataIndex = getValue(content.substring(index), saveFile, attempts);
+
+                data.add(dataIndex.getData());
+                index += dataIndex.getIndex();
+            }
+
+            switch (saveFile) {
+                case AI:
+                    dataObject.setAi(data);
+                    break;
+
+                case META:
+                    dataObject.setMeta(data);
+                    break;
+
+                case GAMESTATE:
+                    dataObject.setGamestate(data);
+                    break;
+            }
+        });
+
+        return dataObject;
     }
 
     @Override
     public void dataToSave(DataObject dataObject, OutputStream outputStream) throws IOException {
-        int indent = 0;
-        StringBuilder stringBuilder = new StringBuilder();
+        Map<SaveFile, String> map = new HashMap<>();
+        map.put(SaveFile.META, dataObject.getMetaToSave());
+        map.put(SaveFile.AI, dataObject.getAiToSave());
+        //        map.put(SaveFile.GAMESTATE, dataObject.getGamestateToSave());
 
-        stringBuilder.append(Constants.STARTING_TEXT).append("\n");
-
-        dataObject.getData().forEach(data -> {
-            stringBuilder.append(data.toSave(indent));
-        });
-
-        FileUtils.zipData(outputStream, Collections.singletonMap(SaveFile.META, stringBuilder.toString().trim()));
+        FileUtils.zipData(outputStream, map);
     }
 
-    private DataIndex getValue(String content) {
+    private DataIndex getValue(String content, SaveFile saveFile, AtomicInteger attempts) {
         int index = 0;
         int fixIndex = 0;
         if (content.startsWith("}\n") || content.startsWith("{\n")) {
@@ -74,38 +91,35 @@ public class SaveServiceImpl implements SaveService {
             fixIndex += 1;
         }
 
-        if (content.endsWith("}\n")) {
-            content = content.substring(0, content.length() - 2);
-        }
-
-        if (content.endsWith("}") || content.endsWith("\n")) {
-            content = content.substring(0, content.length() - 1);
-        }
-
-        String key;
-
-        int endOfLine = content.indexOf("\n", index);
+        int endOfLine = content.indexOf("\n");
         if (endOfLine < 0) {
             endOfLine = content.length();
+
+            if (content.endsWith("{")) {
+                index = endOfLine;
+            }
         }
 
         String line = content.substring(index, endOfLine);
 
         if (line.contains("=")) {
             int separator = content.indexOf("=", index);
-            key = content.substring(index, separator).trim();
+            String key = content.substring(index, separator).trim();
             index = separator + 1;
 
-            DataIndex dataIndex = manageValue(Keys.getType(key), content, index, endOfLine, key, line);
+            DataIndex dataIndex = manageValue(saveFile.getType.apply(key), content, index, endOfLine, key, saveFile,
+                                              attempts);
+
             dataIndex.setIndex(dataIndex.getIndex() + fixIndex);
 
             return dataIndex;
         }
 
-        return new DataIndex(index + fixIndex, null);
+        return new DataIndex(index, null);
     }
 
-    private DataIndex manageValue(DataType type, String content, int index, int endOfLine, String key, String line) {
+    private DataIndex manageValue(DataType type, String content, int index, int endOfLine, String key,
+                                  SaveFile saveFile, AtomicInteger attempts) {
         AbstractData data = null;
         switch (type) {
             case STRING:
@@ -143,18 +157,28 @@ public class SaveServiceImpl implements SaveService {
             case LIST_STRINGS:
                 index += 2;
                 AtomicInteger subIndex = new AtomicInteger();
-                String dataContent = content.substring(index, index + getEndOfObject(content.substring(index)));
+                String dataContent;
+
+                if (index >= content.length()) {
+                    dataContent = content;
+                } else {
+                    dataContent = content.substring(index, index + getEndOfObject(content.substring(index)));
+                }
 
                 switch (type) {
                     case OBJECT:
-                        int tryy = 0;
                         List<AbstractData> subData = new ArrayList<>();
 
-                        while (subIndex.get() < dataContent.length() && tryy < MAX_TRY) {
-                            tryy++;
-                            DataIndex dataIndex = getValue(dataContent.substring(subIndex.get()));
+                        while (subIndex.get() < dataContent.trim().length() && attempts.getAndAdd(1) < MAX_TRY) {
+                            DataIndex dataIndex = getValue(dataContent.substring(subIndex.get()), saveFile, attempts);
+
                             subData.add(dataIndex.getData());
-                            subIndex.addAndGet(dataIndex.getIndex());
+
+                            if (dataContent.substring(subIndex.get()).contains("{") && dataContent.stripLeading().indexOf("{", subIndex.get()) < dataContent.stripLeading().indexOf("\n", subIndex.get())) {
+                                subIndex.addAndGet(skipNextObject(dataContent, subIndex.get()));
+                            } else {
+                                subIndex.addAndGet(dataIndex.getIndex());
+                            }
                         }
 
                         data = new ObjectData(key, subData);
@@ -179,17 +203,19 @@ public class SaveServiceImpl implements SaveService {
                 List<ObjectData> subData = new ArrayList<>();
                 index += dataContent.length();
 
-                Arrays.stream(dataContent.substring(1, dataContent.length() - 2).split("}\n\\{+"))
+                Arrays.stream(dataContent.substring(1, dataContent.length() - 2).split("}\n.*\\{+"))
+                      .filter(Predicate.not(String::isBlank))
                       .forEach(object -> {
-                          int tryyy = 0;
                           int subSubIndex = 0;
                           List<AbstractData> subSubData = new ArrayList<>();
 
-                          while (subSubIndex < object.trim().length() && tryyy < MAX_TRY) {
-                              tryyy++;
-                              DataIndex dataIndex = getValue(object.substring(subSubIndex));
+                          while (subSubIndex < object.trim().length() && attempts.getAndAdd(1) < MAX_TRY) {
+                              DataIndex dataIndex = getValue(object.substring(subSubIndex), saveFile, attempts);
+
                               subSubData.add(dataIndex.getData());
-                              subSubIndex += dataIndex.getIndex();
+                              if (dataIndex.getData().isValueValid()) {
+                                  subSubIndex += dataIndex.getIndex();
+                              }
                           }
 
                           subData.add(new ObjectData(key, subSubData));
@@ -200,8 +226,12 @@ public class SaveServiceImpl implements SaveService {
                 break;
 
             case UNKNOWN:
+                attempts.getAndAdd(1);
                 type = DataType.getType(content.substring(index, endOfLine).trim());
-                DataIndex dataIndex = manageValue(type, line, line.indexOf('=') + 1, line.length(), key, "");
+                DataIndex dataIndex = manageValue(type, content, content.indexOf("=") + 1,
+                                                  content.contains("\n") ? content.indexOf("\n") : content.length(),
+                                                  key, saveFile, attempts);
+
                 data = dataIndex.getData();
                 index = dataIndex.getIndex();
 
@@ -233,6 +263,29 @@ public class SaveServiceImpl implements SaveService {
             }
 
             index++;
+        }
+
+        return index;
+    }
+
+    private int skipNextObject(String s, int beginIndex) {
+        int opening = 0;
+        int closing = 0;
+        int index = 0;
+        s = s.substring(beginIndex);
+
+        for (char c : s.toCharArray()) {
+            index++;
+
+            if (c == '{') {
+                opening++;
+            } else if (c == '}') {
+                closing++;
+            }
+
+            if (opening != 0 && closing == opening) {
+                return index;
+            }
         }
 
         return index;

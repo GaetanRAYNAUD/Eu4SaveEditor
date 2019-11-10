@@ -12,4 +12,9 @@ public class FloatData extends AbstractData<Double> {
     public String toSave(Integer indent) {
         return "\t".repeat(indent) + this.key + "=" + NumberUtils.prettyFloat(this.value) + "\n";
     }
+
+    @Override
+    public Boolean isValueValid() {
+        return this.value != null;
+    }
 }

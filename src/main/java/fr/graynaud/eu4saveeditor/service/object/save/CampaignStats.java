@@ -1,6 +1,8 @@
 package fr.graynaud.eu4saveeditor.service.object.save;
 
-import fr.graynaud.eu4saveeditor.service.object.data.*;
+import fr.graynaud.eu4saveeditor.service.object.data.FloatData;
+import fr.graynaud.eu4saveeditor.service.object.data.IntData;
+import fr.graynaud.eu4saveeditor.service.object.data.StringData;
 
 public class CampaignStats {
 

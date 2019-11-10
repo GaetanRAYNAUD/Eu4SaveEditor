@@ -1,6 +1,7 @@
 package fr.graynaud.eu4saveeditor.service.object.data;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public class ListStringData extends AbstractData<List<String>> {
 
@@ -18,5 +19,11 @@ public class ListStringData extends AbstractData<List<String>> {
         stringBuilder.append("\t".repeat(indent)).append("}\n");
 
         return stringBuilder.toString();
+    }
+
+    @Override
+    public Boolean isValueValid() {
+        return this.value != null && !this.value.isEmpty() &&
+                this.value.stream().anyMatch(Predicate.not(String::isEmpty));
     }
 }

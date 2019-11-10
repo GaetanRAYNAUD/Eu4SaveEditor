@@ -10,4 +10,9 @@ public class BoolData extends AbstractData<Boolean> {
     public String toSave(Integer indent) {
         return "\t".repeat(indent) + this.key + "=" + (this.value ? "yes" : "no") + "\n";
     }
+
+    @Override
+    public Boolean isValueValid() {
+        return this.value != null;
+    }
 }

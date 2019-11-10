@@ -10,4 +10,9 @@ public class IntData extends AbstractData<Integer> {
     public String toSave(Integer indent) {
         return "\t".repeat(indent) + this.key + "=" + this.value + "\n";
     }
+
+    @Override
+    public Boolean isValueValid() {
+        return this.value != null;
+    }
 }

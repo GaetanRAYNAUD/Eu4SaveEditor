@@ -1,7 +1,6 @@
 package fr.graynaud.eu4saveeditor.service.object;
 
 import fr.graynaud.eu4saveeditor.service.object.data.AbstractData;
-import fr.graynaud.eu4saveeditor.service.object.data.DataType;
 
 public class DataIndex {
 

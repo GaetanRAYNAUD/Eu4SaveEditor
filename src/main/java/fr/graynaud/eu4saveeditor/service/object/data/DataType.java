@@ -7,12 +7,11 @@ public enum DataType {
     FLOAT(Pattern.compile("^[-+]?[0-9]+.[0-9]+$")),
     INT(Pattern.compile("^[-+]?[0-9]+$")),
     BOOL(Pattern.compile("^yes|no$")),
-    OBJECT(Pattern.compile("\\{")),
+    OBJECT(Pattern.compile("\\{.*", Pattern.DOTALL)),
     LIST_INT(Pattern.compile("^[0-9]+ .*[0-9]+$")),
     LIST_FLOAT(Pattern.compile("^[-+]?[0-9]+.[0-9]+ .*[-+]?[0-9]+.[0-9]+$")),
     LIST_OBJECTS(Pattern.compile("\\{.*\n.*}", Pattern.DOTALL)),
     LIST_STRINGS(Pattern.compile("\".*\n.*\"")),
-    LIST_KEY_VALUE(null),
     DATE(Pattern.compile("^[0-9]{0,4}.[0-9]{1,2}.[0-9]{1,2}$")),
     UNKNOWN(null);
 
@@ -25,43 +24,43 @@ public enum DataType {
     public static DataType getType(String s) {
         s = s.trim();
 
-        if (s.matches(DataType.LIST_OBJECTS.pattern.pattern())) {
+        if (DataType.LIST_OBJECTS.pattern.matcher(s).matches()) {
             return DataType.LIST_OBJECTS;
         }
 
-        if (s.matches(DataType.OBJECT.pattern.pattern())) {
+        if (DataType.OBJECT.pattern.matcher(s).matches()) {
             return DataType.OBJECT;
         }
 
-        if (s.matches(DataType.BOOL.pattern.pattern())) {
+        if (DataType.BOOL.pattern.matcher(s).matches()) {
             return DataType.BOOL;
         }
 
-        if (s.matches(DataType.FLOAT.pattern.pattern())) {
-            return DataType.FLOAT;
-        }
-
-        if (s.matches(DataType.DATE.pattern.pattern())) {
-            return DataType.DATE;
-        }
-
-        if (s.matches(DataType.INT.pattern.pattern())) {
+        if (DataType.INT.pattern.matcher(s).matches()) {
             return DataType.INT;
         }
 
-        if (s.matches(DataType.LIST_FLOAT.pattern.pattern())) {
+        if (DataType.FLOAT.pattern.matcher(s).matches()) {
+            return DataType.FLOAT;
+        }
+
+        if (DataType.DATE.pattern.matcher(s).matches()) {
+            return DataType.DATE;
+        }
+
+        if (DataType.LIST_FLOAT.pattern.matcher(s).matches()) {
             return DataType.LIST_FLOAT;
         }
 
-        if (s.matches(DataType.LIST_INT.pattern.pattern())) {
+        if (DataType.LIST_INT.pattern.matcher(s).matches()) {
             return DataType.LIST_INT;
         }
 
-        if (s.matches(DataType.LIST_STRINGS.pattern.pattern())) {
+        if (DataType.LIST_STRINGS.pattern.matcher(s).matches()) {
             return DataType.LIST_STRINGS;
         }
 
-        if (s.matches(DataType.STRING.pattern.pattern())) {
+        if (DataType.STRING.pattern.matcher(s).matches()) {
             return DataType.STRING;
         }
 

@@ -26,10 +26,11 @@ public class Controller {
 
     @PostMapping("/parse")
     public ResponseEntity parse(@RequestPart("save") MultipartFile save) throws IOException {
-        return new ResponseEntity<>(new DataObject(save.getOriginalFilename(), saveService.saveToData(save)), HttpStatus.OK);
+        return new ResponseEntity<>(saveService.saveToData(save).setFileName(save.getOriginalFilename()),
+                                    HttpStatus.OK);
     }
 
-    @PostMapping(value = "/convert", produces= "application/zip")
+    @PostMapping(value = "/convert", produces = "application/zip")
     public void convert(@RequestBody DataObject dataObject, HttpServletResponse response) throws IOException {
         response.setContentType("application/zip");
         response.setHeader("Content-Disposition", "attachment; filename=edited_" + dataObject.getFileName());

@@ -1,6 +1,7 @@
 package fr.graynaud.eu4saveeditor.service.object.data;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ListIntData extends AbstractData<List<Integer>> {
 
@@ -20,5 +21,10 @@ public class ListIntData extends AbstractData<List<Integer>> {
         stringBuilder.append("\t".repeat(indent)).append("}\n");
 
         return stringBuilder.toString();
+    }
+
+    @Override
+    public Boolean isValueValid() {
+        return this.value != null && !this.value.isEmpty() && this.value.stream().anyMatch(Objects::nonNull);
     }
 }

@@ -1,5 +1,6 @@
 package fr.graynaud.eu4saveeditor.service.object.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -52,4 +53,12 @@ public abstract class AbstractData<T> {
     }
 
     public abstract String toSave(Integer indent);
+
+    @JsonIgnore
+    public abstract Boolean isValueValid();
+
+    @Override
+    public String toString() {
+        return toSave(0);
+    }
 }
