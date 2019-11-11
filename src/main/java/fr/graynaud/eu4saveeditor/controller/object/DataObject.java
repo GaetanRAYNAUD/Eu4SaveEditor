@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import fr.graynaud.eu4saveeditor.common.Constants;
 import fr.graynaud.eu4saveeditor.service.object.data.AbstractData;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,9 @@ public class DataObject {
     private Map<String, AbstractData> gamestate;
 
     private Map<String, AbstractData> ai;
+
+    @JsonIgnore
+    private Map<String, Integer> duplications = new HashMap<>();
 
     public String getFileName() {
         return fileName;
@@ -49,9 +53,9 @@ public class DataObject {
     @JsonIgnore
     public void setMeta(List<AbstractData> meta) {
         if (meta != null && !meta.isEmpty()) {
-            this.meta = meta.stream().collect(Collectors.toMap(AbstractData::getKey, a -> a, (u, v) -> {
-                throw new IllegalStateException(String.format("Duplicate key %s", u));
-            }, LinkedHashMap::new));
+            this.meta = meta.stream()
+                            .collect(Collectors.toMap(AbstractData::getKey, a -> a, this::handleDuplication,
+                                                      LinkedHashMap::new));
         }
     }
 
@@ -80,9 +84,9 @@ public class DataObject {
     @JsonIgnore
     public void setGamestate(List<AbstractData> gamestate) {
         if (gamestate != null && !gamestate.isEmpty()) {
-            this.gamestate = gamestate.stream().collect(Collectors.toMap(AbstractData::getKey, a -> a, (u, v) -> {
-                throw new IllegalStateException(String.format("Duplicate key %s", u));
-            }, LinkedHashMap::new));
+            this.gamestate = gamestate.stream()
+                                      .collect(Collectors.toMap(AbstractData::getKey, a -> a, this::handleDuplication,
+                                                                LinkedHashMap::new));
         }
     }
 
@@ -111,14 +115,22 @@ public class DataObject {
     @JsonIgnore
     public void setAi(List<AbstractData> ai) {
         if (ai != null && !ai.isEmpty()) {
-            this.ai = ai.stream().collect(Collectors.toMap(AbstractData::getKey, a -> a, (u, v) -> {
-                throw new IllegalStateException(String.format("Duplicate key %s", u));
-            }, LinkedHashMap::new));
+            this.ai = ai.stream()
+                        .collect(Collectors.toMap(AbstractData::getKey, a -> a, this::handleDuplication,
+                                                  LinkedHashMap::new));
         }
     }
 
     @JsonSetter("ai")
     public void setAi(Map<String, AbstractData> ai) {
         this.ai = ai;
+    }
+
+    @JsonIgnore
+    private AbstractData handleDuplication(AbstractData u, AbstractData v) {
+        Integer duplication = duplications.getOrDefault(u.getKey(), 1);
+        u.setKey(u.getKey() + Constants.DUPLICATION_KEY + duplication);
+        duplications.put(v.getKey(), ++duplication);
+        return u;
     }
 }

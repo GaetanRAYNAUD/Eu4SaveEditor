@@ -20,7 +20,9 @@ public class ObjectData extends AbstractData<List<AbstractData>> {
             stringBuilder.append("\t".repeat(indent)).append(this.key).append("={\n");
         }
 
-        this.value.forEach(data -> stringBuilder.append(data.toSave(indent + 1)));
+        if (this.value != null) {
+            this.value.forEach(data -> stringBuilder.append(data.toSave(indent + 1)));
+        }
 
         if (printKey) {
             stringBuilder.append("\t".repeat(indent)).append("}\n");

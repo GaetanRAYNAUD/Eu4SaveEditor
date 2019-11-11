@@ -3,10 +3,10 @@ package fr.graynaud.eu4saveeditor.service.object.data;
 import java.util.List;
 import java.util.Objects;
 
-public class ListIntData extends AbstractData<List<Integer>> {
+public class LineIntData extends AbstractData<List<Integer>> {
 
-    public ListIntData(String key, List<Integer> value) {
-        super(DataType.LIST_INT, key, value);
+    public LineIntData(String key, List<Integer> value) {
+        super(DataType.LINE_INT, key, value);
     }
 
     @Override

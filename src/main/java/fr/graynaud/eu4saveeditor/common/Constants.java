@@ -8,6 +8,6 @@ public final class Constants {
     }
 
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy.M.d");
-    public static final String FILES_NAME_FIELD = "fileName";
     public static final String STARTING_TEXT = "EU4txt";
+    public static final String DUPLICATION_KEY = "_duplication_";
 }

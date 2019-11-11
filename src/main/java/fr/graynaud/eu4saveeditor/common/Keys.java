@@ -2,7 +2,110 @@ package fr.graynaud.eu4saveeditor.common;
 
 import fr.graynaud.eu4saveeditor.service.object.data.DataType;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public final class Keys {
+
+    //Keys I know why does not have a type
+    private static final Set<String> BANNED_WORDS = Stream.of("type", "id", "value", "REB", "PIR", "NAT", "SWE", "DAN",
+                                                              "FIN", "GOT", "NOR", "SHL", "SCA", "EST", "LVA", "SMI",
+                                                              "KRL", "ICE", "ACH", "ALB", "ATH", "BOS", "BUL", "BYZ",
+                                                              "CEP", "CRO", "CRT", "CYP", "EPI", "GRE", "KNI", "MOE",
+                                                              "MOL", "MON", "NAX", "RAG", "RMN", "SER", "TRA", "WAL",
+                                                              "HUN", "SLO", "TUR", "CNN", "CRN", "ENG", "LEI", "IRE",
+                                                              "MNS", "SCO", "TYR", "WLS", "NOL", "GBR", "MTH", "ULS",
+                                                              "DMS", "SLN", "KID", "HSC", "ORD", "TRY", "FLY", "MCM",
+                                                              "KOI", "LOI", "BRZ", "CAN", "CHL", "COL", "HAT", "LAP",
+                                                              "LOU", "MEX", "PEU", "PRG", "QUE", "CAM", "USA", "VNZ",
+                                                              "AUS", "DNZ", "KRA", "LIT", "LIV", "MAZ", "POL", "PRU",
+                                                              "KUR", "RIG", "TEU", "PLC", "VOL", "KIE", "CHR", "OKA",
+                                                              "ALE", "ALS", "AMG", "AUV", "AVI", "BOU", "BRI", "BUR",
+                                                              "CHP", "COR", "DAU", "FOI", "FRA", "GUY", "NEV", "NRM",
+                                                              "ORL", "PIC", "PRO", "SPI", "TOU", "BER", "AAC", "ANH",
+                                                              "ANS", "AUG", "BAD", "BAV", "BOH", "BRA", "BRE", "BRU",
+                                                              "EFR", "FRN", "GER", "HAB", "HAM", "HAN", "HES", "HLR",
+                                                              "KLE", "KOL", "LAU", "LOR", "LUN", "MAG", "MAI", "MEI",
+                                                              "MKL", "MUN", "MVA", "OLD", "PAL", "POM", "SAX", "SIL",
+                                                              "SLZ", "STY", "SWI", "THU", "TIR", "TRI", "ULM", "WBG",
+                                                              "WES", "WUR", "NUM", "MEM", "VER", "NSA", "RVA", "DTT",
+                                                              "ARA", "CAS", "CAT", "GRA", "NAV", "POR", "SPA", "GAL",
+                                                              "LON", "ADU", "AQU", "ETR", "FER", "GEN", "ITA", "MAN",
+                                                              "MLO", "MOD", "NAP", "PAP", "PAR", "PIS", "SAR", "SAV",
+                                                              "SIC", "SIE", "TUS", "URB", "VEN", "MFA", "LUC", "LAN",
+                                                              "JAI", "BRB", "FLA", "FRI", "GEL", "HAI", "HOL", "LIE",
+                                                              "LUX", "NED", "UTR", "ARM", "AST", "CRI", "GEO", "KAZ",
+                                                              "MOS", "NOV", "PSK", "QAS", "RUS", "RYA", "TVE", "UKR",
+                                                              "YAR", "ZAZ", "NOG", "SIB", "PLT", "PRM", "FEO", "BSH",
+                                                              "BLO", "RSO", "GOL", "GLH", "ADE", "ALH", "ANZ", "ARB",
+                                                              "ARD", "BHT", "DAW", "ERE", "FAD", "GRM", "HDR", "HED",
+                                                              "LEB", "MAK", "MDA", "MFL", "MHR", "NAJ", "NJR", "OMA",
+                                                              "RAS", "SHM", "SHR", "SRV", "YAS", "YEM", "HSN", "BTL",
+                                                              "AKK", "AYD", "CND", "DUL", "IRQ", "KAR", "SYR", "TRE",
+                                                              "SRU", "MEN", "RAM", "AVR", "MLK", "SME", "ARL", "MSY",
+                                                              "RUM", "ALG", "FEZ", "MAM", "MOR", "TRP", "TUN", "EGY",
+                                                              "KBA", "TFL", "SOS", "TLC", "TGT", "GHD", "FZA", "MZB",
+                                                              "KZH", "KHI", "SHY", "KOK", "BUK", "AFG", "KHO", "PER",
+                                                              "QAR", "TIM", "TRS", "KRY", "CIR", "GAZ", "IME", "TAB",
+                                                              "ORM", "LRI", "SIS", "BPI", "FRS", "KRM", "YZD", "ISF",
+                                                              "TBR", "BSR", "MGR", "QOM", "AZT", "CHE", "CHM", "CRE",
+                                                              "HUR", "INC", "IRO", "MAY", "SHA", "ZAP", "ASH", "BEN",
+                                                              "ETH", "KON", "MAL", "NUB", "SON", "ZAN", "ZIM", "ADA",
+                                                              "HAU", "KBO", "LOA", "OYO", "SOF", "SOK", "JOL", "SFA",
+                                                              "MBA", "MLI", "AJU", "MDI", "ENA", "AFA", "ALO", "DAR",
+                                                              "GLE", "HAR", "HOB", "KAF", "MED", "MJE", "MRE", "PTE",
+                                                              "WAR", "BTI", "BEJ", "JIM", "WLY", "DAM", "HDY", "SOA",
+                                                              "JJI", "ABB", "TYO", "SYO", "KSJ", "LUB", "LND", "CKW",
+                                                              "KIK", "KZB", "YAK", "KLD", "KUB", "RWA", "BUU", "BUG",
+                                                              "NKO", "KRW", "BNY", "BSG", "UBH", "MRA", "LDU", "TBK",
+                                                              "MKU", "RZW", "MIR", "SKA", "BTS", "MFY", "ANT", "ANN",
+                                                              "ARK", "ATJ", "AYU", "BLI", "BAN", "BEI", "CHA", "CHG",
+                                                              "CHK", "DAI", "JAP", "AMA", "ASA", "CSK", "DTE", "HJO",
+                                                              "HSK", "HTK", "IKE", "IMG", "MAE", "MRI", "ODA", "OTM",
+                                                              "OUC", "SBA", "SMZ", "TKD", "TKG", "UES", "YMN", "RFR",
+                                                              "ASK", "KTB", "ANU", "AKM", "AKT", "CBA", "ISK", "ITO",
+                                                              "KKC", "KNO", "OGS", "SHN", "STK", "TKI", "UTN", "TTI",
+                                                              "KHA", "KHM", "KOR", "LNA", "LUA", "LXA", "MAJ", "MCH",
+                                                              "MKS", "MLC", "MNG", "MTR", "OIR", "PAT", "PEG", "QNG",
+                                                              "RYU", "SST", "SUK", "SUL", "TAU", "TIB", "TOK", "VIE",
+                                                              "CZH", "CSH", "CXI", "YUA", "MYR", "MHX", "MJZ", "KRC",
+                                                              "KLK", "HMI", "ZUN", "KAS", "CHH", "KSD", "SYG", "UTS",
+                                                              "KAM", "GUG", "CDL", "CYI", "CMI", "MIN", "YUE", "SHU",
+                                                              "NNG", "CHC", "TNG", "WUU", "QIC", "YAN", "JIN", "LNG",
+                                                              "QIN", "HUA", "CGS", "BAL", "BNG", "BIJ", "BAH", "DLH",
+                                                              "GOC", "DEC", "MAR", "MUG", "MYS", "VIJ", "AHM", "ASS",
+                                                              "GUJ", "JNP", "MAD", "MLW", "MAW", "MER", "MUL", "NAG",
+                                                              "NPL", "ORI", "PUN", "SND", "BRR", "JAN", "KRK", "GDW",
+                                                              "GRJ", "GWA", "DHU", "KSH", "KLN", "KHD", "ODH", "VND",
+                                                              "MAB", "MEW", "BDA", "BST", "BHU", "BND", "CEY", "JSL",
+                                                              "KAC", "KMT", "KGR", "KAT", "KOC", "MLB", "HAD", "NGA",
+                                                              "RMP", "LDK", "BGL", "JFN", "PTA", "GHR", "CHD", "NGP",
+                                                              "JAJ", "TRT", "CMP", "BGA", "TPR", "SDY", "BHA", "YOR",
+                                                              "DGL", "BAR", "HSA", "SMO", "NZH", "KOJ", "MSA", "HIN",
+                                                              "ABE", "APA", "ASI", "BLA", "CAD", "CHI", "CHO", "CHY",
+                                                              "COM", "FOX", "ILL", "LEN", "MAH", "MIK", "MMI", "NAH",
+                                                              "OJI", "OSA", "OTT", "PAW", "PEQ", "PIM", "POT", "POW",
+                                                              "PUE", "SHO", "SIO", "SUS", "WCR", "AIR", "BON", "DAH",
+                                                              "DGB", "FUL", "JNN", "KAN", "KBU", "KNG", "KTS", "MSI",
+                                                              "NUP", "TMB", "YAO", "YAT", "ZAF", "ZZZ", "NDO", "AVA",
+                                                              "HSE", "JOH", "KED", "LIG", "MPH", "MYA", "PRK", "CHU",
+                                                              "HOD", "CHV", "KMC", "BRT", "ARP", "CLM", "CNK", "COC",
+                                                              "HDA", "ITZ", "KIC", "KIO", "MIX", "SAL", "TAR", "TLA",
+                                                              "TLX", "TOT", "WIC", "XIU", "BLM", "BTN", "CRB", "DMK",
+                                                              "PGR", "PLB", "PSA", "SAK", "SUN", "KUT", "BNJ", "LFA",
+                                                              "LNO", "LUW", "MGD", "TER", "TID", "MAS", "PGS", "TDO",
+                                                              "MNA", "CEB", "BTU", "CSU", "CCQ", "MPC", "MCA", "QTO",
+                                                              "CJA", "HJA", "PTG", "TPQ", "TPA", "TUA", "GUA", "CUA",
+                                                              "WKA", "CYA", "CLA", "CRA", "PCJ", "ARW", "CAB", "ICM",
+                                                              "JMN", "ROM", "JOM", "HAH", "ISR", "TEM", "TRL", "YKT",
+                                                              "YAQ", "TAI", "MIS", "MSC", "ZNI", "XAL", "HSI", "MKA",
+                                                              "MMA", "DNG", "EJZ", "NVK", "C00", "C01", "C02", "C03",
+                                                              "modifier", "light_ship", "dynasty", "continent", "original",
+                                                              "provinces", "C04", "C05", "C06", "C07", "C08", "C09",
+                                                              "C10", "C11", "C12", "C13", "C14", "C15", "government",
+                                                              "defender",
+                                                              "leader", "active", "trade").collect(Collectors.toSet());
 
     private Keys() {
     }
@@ -42,17 +145,20 @@ public final class Keys {
             case "savegame_versions":
             case "dlc_enabled":
             case "mod_enabled":
-                return DataType.LIST_STRINGS;
+                return DataType.LIST_STRING;
 
             case "multi_player":
             case "not_observer":
                 return DataType.BOOL;
 
             case "campaign_stats":
-                return DataType.LIST_OBJECTS;
+                return DataType.LIST_OBJECT;
 
             default:
-                System.out.println("Unknown meta key: " + key);
+                if (!BANNED_WORDS.contains(key)) {
+                    System.out.println("Unknown meta key: " + key);
+                }
+
                 return DataType.UNKNOWN; //If UNKNOWN, DataType.getType(value), mostly because a key can have multiple types (ex: value)
         }
     }
@@ -1278,15 +1384,975 @@ public final class Keys {
                 return DataType.BOOL;
 
             default:
-                System.out.println("Unknown ai key: " + key);
+                if (!BANNED_WORDS.contains(key)) {
+                    System.out.println("Unknown ai key: " + key);
+                }
+
                 return DataType.UNKNOWN; //If UNKNOWN, DataType.getType(value), mostly because a key can have multiple types (ex: value)
         }
     }
 
     public static DataType getTypeGamestate(String key) {
         switch (key) {
+            case "start_date":
+            case "date":
+            case "trading_policy_date":
+            case "most_recent_treasure_ship_passage":
+            case "schools_initiated":
+            case "dlh_bahlul_lodi_flag":
+            case "plc_union_outcome_flag":
+            case "mol_hungarian_march":
+            case "enable_stop_shadow_kingdom":
+            case "wih_meerabai_flag":
+            case "wih_barbaracilli_flag":
+            case "wih_eleniethiopia_flag":
+            case "death_of_shah_rukh":
+            case "constantinople_restored":
+            case "lollard_heresy":
+            case "wih_caterina_sforza_flag":
+            case "coptic_qasr_ibrim_liberated":
+            case "new_world_discovered":
+            case "italy_out_of_HRE":
+            case "wih_anacaona_flag":
+            case "wih_lucreziaborgia_flag":
+            case "wih_suriyothai_flag":
+            case "wih_heonanseolheon_flag":
+            case "no_legatus_natus":
+            case "no_primas_germaniae":
+            case "counter_reformation":
+            case "wih_anneboleyn_flag":
+            case "wih_dorotheasaxelauenburg_flag":
+            case "wih_inesdesuarez_flag":
+            case "triangle_happened":
+            case "wih_kenausimonsdochterhasselaer_flag":
+            case "dorgon_flag":
+            case "hagia_sophia_now_mosque":
+            case "japan_has_encountered_the_west":
+            case "death_of_haji_giray":
+            case "wih_safiyesultan_flag":
+            case "circumnavigation_completed":
+            case "wih_lamalince_flag":
+            case "inc_smallpox":
+            case "wih_roxelana_tur_flag":
+            case "eth_start_of_the_oromo":
+            case "last_janissary_spawn":
+            case "expiry_date":
+            case "enable":
+            case "crusade_start":
+            case "last_excom":
+            case "birth_date":
+            case "defender_date":
+                return DataType.DATE;
+
+            case "current_age":
+            case "area":
+            case "country":
+            case "which":
+            case "definitions":
+            case "trading_policy":
+            case "name":
+            case "tag":
+            case "key":
+            case "heretic":
+            case "religion":
+            case "culture":
+            case "independence":
+            case "emperor":
+            case "papal_state":
+            case "first":
+            case "second":
+            case "crusade_target":
+            case "controller":
+            case "previous_controller":
+            case "owner":
+                return DataType.STRING;
+
+            case "gameplaysettings":
+            case "saved_event_target":
+            case "flags":
+            case "map_area_data":
+            case "brittany_area":
+            case "state":
+            case "country_state":
+            case "active_edict":
+            case "node":
+            case "incoming":
+            case "current_banner":
+            case "investments":
+            case "normandy_area":
+            case "provence_area":
+            case "poitou_area":
+            case "guyenne_area":
+            case "pyrenees_area":
+            case "languedoc_area":
+            case "bourgogne_area":
+            case "massif_central_area":
+            case "savoy_dauphine_area":
+            case "lorraine_area":
+            case "picardy_area":
+            case "ile_de_france_area":
+            case "champagne_area":
+            case "loire_area":
+            case "wallonia_area":
+            case "holland_area":
+            case "flanders_area":
+            case "netherlands_area":
+            case "frisia_area":
+            case "aragon_area":
+            case "catalonia_area":
+            case "valencia_area":
+            case "lower_andalucia_area":
+            case "upper_andalucia_area":
+            case "castille_area":
+            case "toledo_area":
+            case "asturias_area":
+            case "galicia_area":
+            case "baleares_area":
+            case "basque_country":
+            case "leon_area":
+            case "beieras_area":
+            case "alentejo_area":
+            case "macaronesia_area":
+            case "venetia_area":
+            case "lombardy_area":
+            case "piedmont_area":
+            case "tuscany_area":
+            case "liguria_area":
+            case "corsica_sardinia_area":
+            case "sicily_area":
+            case "naples_area":
+            case "calabria_area":
+            case "apulia_area":
+            case "emilia_romagna_area":
+            case "central_italy_area":
+            case "munster_area":
+            case "connacht_area":
+            case "leinster_area":
+            case "ulster_area":
+            case "kingdom_of_the_isles_area":
+            case "highlands_area":
+            case "lowlands_area":
+            case "wales_area":
+            case "scottish_marches_area":
+            case "yorkshire_area":
+            case "west_midlands_area":
+            case "east_midlands_area":
+            case "wessex_area":
+            case "home_counties_area":
+            case "east_anglia_area":
+            case "jutland_area":
+            case "denmark_area":
+            case "skaneland_area":
+            case "gotaland_area":
+            case "vastra_gotaland_area":
+            case "svealand_area":
+            case "ostra_svealand_area":
+            case "norrland_area":
+            case "finland_area":
+            case "bothnia_area":
+            case "laponia_area":
+            case "karelia_area":
+            case "north_karelia":
+            case "northern_norway":
+            case "eastern_norway":
+            case "western_norway":
+            case "subarctic_islands_area":
+            case "iceland_area":
+            case "estonia_ingria_area":
+            case "livonia_area":
+            case "curonia_area":
+            case "east_prussia_area":
+            case "west_prussia_area":
+            case "wielkopolska_area":
+            case "malopolska_area":
+            case "red_ruthenia_area":
+            case "podolia_volhynia_area":
+            case "volhynia_area":
+            case "pripyat_area":
+            case "mazovia_area":
+            case "central_poland_area":
+            case "sandomierz_area":
+            case "kuyavia_area":
+            case "samogitia_area":
+            case "lithuania_area":
+            case "west_dniepr_area":
+            case "east_dniepr_area":
+            case "chernigov_area":
+            case "sloboda_ukraine_area":
+            case "yedisan_area":
+            case "zaporizhia_area":
+            case "azov_area":
+            case "crimea_area":
+            case "white_ruthenia_area":
+            case "minsk_area":
+            case "ryazan_area":
+            case "moscow_area":
+            case "vladimir_area":
+            case "yaroslavl_area":
+            case "tver_area":
+            case "suzdal_area":
+            case "smolensk_area":
+            case "oka_area":
+            case "novgorod_area":
+            case "pskov_area":
+            case "vologda_area":
+            case "beloozero_area":
+            case "astrakhan_area":
+            case "lower_don_area":
+            case "kazan_area":
+            case "samara_area":
+            case "lower_yik_area":
+            case "nogai_area":
+            case "ural_area":
+            case "pomor_area":
+            case "arkhangelsk_area":
+            case "bashkiria_area":
+            case "volga_area":
+            case "galich_area":
+            case "kama_area":
+            case "tambov_area":
+            case "saratov_area":
+            case "silesia_area":
+            case "bohemia_area":
+            case "erzgebirge_area":
+            case "south_saxony_area":
+            case "upper_bavaria_area":
+            case "lower_bavaria_area":
+            case "lower_swabia_area":
+            case "franconia_area":
+            case "upper_swabia_area":
+            case "northern_saxony_area":
+            case "thuringia_area":
+            case "neumark_area":
+            case "mittelmark_area":
+            case "vorpommern_area":
+            case "hinter_pommern_area":
+            case "tirol_area":
+            case "austria_proper_area":
+            case "inner_austria_area":
+            case "carinthia_area":
+            case "switzerland_area":
+            case "romandie_area":
+            case "upper_rhineland_area":
+            case "palatinate_area":
+            case "north_rhine_area":
+            case "lower_rhineland_area":
+            case "westphalia_area":
+            case "hesse_area":
+            case "braunschweig_area":
+            case "weser_area":
+            case "holstein_area":
+            case "lower_saxony_area":
+            case "mecklenburg_area":
+            case "macedonia_area":
+            case "morea_area":
+            case "northern_greece_area":
+            case "thrace_area":
+            case "bulgaria_area":
+            case "wallachia_area":
+            case "moldavia_area":
+            case "transylvania_area":
+            case "southern_transylvania_area":
+            case "slovakia_area":
+            case "serbia_area":
+            case "rascia_area":
+            case "albania_area":
+            case "bosnia_area":
+            case "croatia_area":
+            case "east_adriatic_coast_area":
+            case "alfold_area":
+            case "transdanubia_area":
+            case "imereti_area":
+            case "samtskhe_area":
+            case "kartli_kakheti_area":
+            case "armenia_area":
+            case "shirvan_area":
+            case "circassia_area":
+            case "dagestan_area":
+            case "rum_area":
+            case "erzurum_area":
+            case "hudavendigar_area":
+            case "germiyan_area":
+            case "aydin_area":
+            case "ankara_area":
+            case "aegean_archipelago_area":
+            case "kastamonu_area":
+            case "karaman_area":
+            case "cukurova_area":
+            case "aleppo_area":
+            case "syria_area":
+            case "trans_jordan_area":
+            case "palestine_area":
+            case "dulkadir_area":
+            case "iraq_arabi_area":
+            case "basra_area":
+            case "luristan_area":
+            case "north_kurdistan_area":
+            case "khuzestan_area":
+            case "shahrizor_area":
+            case "al_jazira_area":
+            case "bahrain_area":
+            case "pirate_coast_area":
+            case "tabuk_area":
+            case "medina_area":
+            case "mecca_area":
+            case "asir_area":
+            case "tihama_al_yemen_area":
+            case "upper_yemen_area":
+            case "yemen_area":
+            case "hadramut_area":
+            case "mahra_area":
+            case "dhofar_area":
+            case "oman_area":
+            case "mascat_area":
+            case "gulf_of_arabia_area":
+            case "al_wahat_area":
+            case "delta_area":
+            case "bahari_area":
+            case "vostani_area":
+            case "said_area":
+            case "cyrenaica_area":
+            case "tunisia_area":
+            case "algiers_area":
+            case "barbary_coast_area":
+            case "kabylia_area":
+            case "hautes_plaines_area":
+            case "tafilalt_area":
+            case "sus_area":
+            case "southern_morocco_area":
+            case "western_morocco_area":
+            case "marrekesh_area":
+            case "northern_morocco_area":
+            case "madagascar_highlands_area":
+            case "betsimasaraka_area":
+            case "sakalava_area":
+            case "southern_madagascar":
+            case "lower_zambezi_area":
+            case "upper_zambezi_area":
+            case "shire_area":
+            case "butua_area":
+            case "zimbabwe_area":
+            case "ruvuma_area":
+            case "ngonde_area":
+            case "uticulo_makuana_area":
+            case "quelimane_area":
+            case "limpopo_area":
+            case "buha_area":
+            case "buzinza_area":
+            case "luba_area":
+            case "katanga_area":
+            case "zambia_area":
+            case "chokwe_area":
+            case "rwanda_area":
+            case "uganda_area":
+            case "bunyoro_area":
+            case "kasai_area":
+            case "sankuru_area":
+            case "lower_kasai":
+            case "ogaden_area":
+            case "lower_nubia_area":
+            case "dongola_area":
+            case "upper_nubia_area":
+            case "red_sea_coast_area":
+            case "ifat_area":
+            case "southern_ethiopia_area":
+            case "hadiya_area":
+            case "central_ethiopia_area":
+            case "damot_area":
+            case "shewa_area":
+            case "mogadishu_area":
+            case "ajuuran_area":
+            case "majarteen_area":
+            case "indian_ocean_islands_area":
+            case "western_sahara_area":
+            case "jolof_area":
+            case "tekrur_area":
+            case "baghena_area":
+            case "manding_area":
+            case "futa_jallon_area":
+            case "massina_area":
+            case "jenne_area":
+            case "niger_bend_area":
+            case "upper_volta_area":
+            case "kong_area":
+            case "lower_volta_area":
+            case "lower_niger_area":
+            case "hausa_area":
+            case "katsina_area":
+            case "zazzau_area":
+            case "bornu_area":
+            case "kanem_area":
+            case "adamawa_plateau_area":
+            case "dendi_area":
+            case "azbin_area":
+            case "east_azbin_area":
+            case "atacora_oueme_area":
+            case "benin_area":
+            case "west_africa_coast_area":
+            case "matamba_area":
+            case "coastal_kongo":
+            case "kongo_area":
+            case "angola_namibia_area":
+            case "makran_area":
+            case "sistan_area":
+            case "kalat_area":
+            case "ferghana_area":
+            case "arys_area":
+            case "kyzylkum_area":
+            case "transoxiana_area":
+            case "termez_area":
+            case "khiva_area":
+            case "kabulistan_area":
+            case "transcaspia_area":
+            case "mashhad_area":
+            case "herat_area":
+            case "birjand_area":
+            case "ghor_area":
+            case "merv_area":
+            case "balkh_area":
+            case "kerman_area":
+            case "persian_gulf_coast":
+            case "mogostan_area":
+            case "farsistan_area":
+            case "iraq_e_ajam_area":
+            case "azerbaijan_area":
+            case "isfahan_area":
+            case "tabriz_area":
+            case "tabarestan_area":
+            case "sirhind_area":
+            case "sind_sagar_area":
+            case "oudh_area":
+            case "katehar_area":
+            case "purvanchal_area":
+            case "upper_doab_area":
+            case "lower_doab_area":
+            case "lahore_area":
+            case "multan_area":
+            case "naga_hills_area":
+            case "east_bengal_area":
+            case "north_bengal_area":
+            case "tripura_area":
+            case "bihar_area":
+            case "mithila_area":
+            case "jharkhand_area":
+            case "upper_mahanadi_area":
+            case "gaur_area":
+            case "west_bengal_area":
+            case "gird_area":
+            case "baghelkhand_area":
+            case "bundelkhand_area":
+            case "gondwana_area":
+            case "orissa_area":
+            case "garjat_area":
+            case "telingana_area":
+            case "golconda_area":
+            case "andhra_area":
+            case "raichur_doab_area":
+            case "khandesh_area":
+            case "rayalaseema_area":
+            case "malabar_area":
+            case "malwa_area":
+            case "mewar_area":
+            case "jangladesh_area":
+            case "marwar_area":
+            case "jaipur_area":
+            case "sindh_area":
+            case "northern_sindh_area":
+            case "north_carnatic_area":
+            case "south_carnatic_area":
+            case "madura_area":
+            case "tanjore_area":
+            case "kongu_area":
+            case "konkan_area":
+            case "desh_area":
+            case "ahmednagar_area":
+            case "kanara_area":
+            case "maidan_area":
+            case "mysore_area":
+            case "berar_area":
+            case "assam_area":
+            case "himalayan_hills_area":
+            case "nepal_area":
+            case "baisi_rajya_area":
+            case "bhutan_area":
+            case "kashmir_area":
+            case "lanka_area":
+            case "south_lanka_area":
+            case "ahmedabad_area":
+            case "patan_area":
+            case "tapti_area":
+            case "saurashtra_area":
+            case "upper_burma_area":
+            case "central_burma_area":
+            case "chindwin_area":
+            case "kachin_area":
+            case "shan_hill_area":
+            case "karenni_area":
+            case "malaya_area":
+            case "malacca_area":
+            case "khorat_area":
+            case "champa_area":
+            case "cambodia_area":
+            case "lower_burma_area":
+            case "arakan_area":
+            case "mekong_area":
+            case "tenasserim_area":
+            case "north_tenasserim_area":
+            case "vietnam_area":
+            case "red_river_delta_area":
+            case "south_laos_area":
+            case "north_laos_area":
+            case "central_thai_area":
+            case "northern_thai_area":
+            case "mindanao_area":
+            case "west_mindanao_area":
+            case "visayas_area":
+            case "palawan_area":
+            case "luzon_area":
+            case "southern_luzon_area":
+            case "north_sumatra_area":
+            case "batak_area":
+            case "central_sumatra_area":
+            case "minangkabau_area":
+            case "south_sumatra_area":
+            case "east_java_area":
+            case "central_java_area":
+            case "west_java_area":
+            case "kutai_area":
+            case "brunei_area":
+            case "spice_islands_area":
+            case "lesser_sunda_islands_area":
+            case "south_sulawesi_area":
+            case "pyongan_area":
+            case "hamgyeong_area":
+            case "western_korea_area":
+            case "eastern_korea_area":
+            case "south_korea_area":
+            case "hokkaido_area":
+            case "hokuriku_area":
+            case "kanto_area":
+            case "eastern_kanto_area":
+            case "kyushu_area":
+            case "northern_kyushu":
+            case "shikoku_area":
+            case "eastern_chubu_area":
+            case "chubu_area":
+            case "kinai_area":
+            case "thohoku_area":
+            case "sanindo_area":
+            case "saigoku_area":
+            case "kamchatka_area":
+            case "buryatia_area":
+            case "ob_area":
+            case "perm_area":
+            case "balchasj_area":
+            case "kazakhstan_area":
+            case "syr_darya_area":
+            case "yrtesh_area":
+            case "ishim_area":
+            case "aqmola_area":
+            case "heilongjiang_area":
+            case "east_heilongjiang_area":
+            case "central_heilongjiang_area":
+            case "cicigar_area":
+            case "ilan_hala_area":
+            case "sakhalin_area":
+            case "central_jilin_area":
+            case "ningguta_area":
+            case "furdan_area":
+            case "jilin_area":
+            case "liaoning_area":
+            case "ordos_area":
+            case "eastern_mongolia":
+            case "chahar_area":
+            case "inner_mongolia_area":
+            case "outer_mongolia_area":
+            case "xilin_gol_area":
+            case "altai_sayan_area":
+            case "tannu_uriankhai_area":
+            case "central_mongolia_area":
+            case "uliastai_area":
+            case "jetysuu_area":
+            case "kashgaria_area":
+            case "shanshan_area":
+            case "turpan_kumul_area":
+            case "zungaria_area":
+            case "amdo_area":
+            case "tsang_area":
+            case "north_zungaria":
+            case "kham_area":
+            case "utsang_area":
+            case "ngari_area":
+            case "hebei_area":
+            case "south_hebei_area":
+            case "shandong_area":
+            case "jiangsu_area":
+            case "south_jiangsu_area":
+            case "anhui_area":
+            case "south_anhui_area":
+            case "zhejiang_area":
+            case "jiangxi_area":
+            case "fujian_area":
+            case "guangdong_area":
+            case "west_guangdong_area":
+            case "guangxi_area":
+            case "yun_gui_area":
+            case "yun_gui_borderland_area":
+            case "sichuan_area":
+            case "chuannan_area":
+            case "chuanbei_area":
+            case "huguang_area":
+            case "hunan_area":
+            case "henan_area":
+            case "north_henan_area":
+            case "shanxi_area":
+            case "shaanxi_area":
+            case "gansu_area":
+            case "west_gansu_area":
+            case "minas_gerais_area":
+            case "sao_paolo_area":
+            case "rio_de_janeiro_area":
+            case "bahia_area":
+            case "pernambuco_area":
+            case "ceara_area":
+            case "sao_francisco_area":
+            case "paraguay_area":
+            case "bahia_blanca_area":
+            case "southern_pampas_area":
+            case "buenos_aires_area":
+            case "jujuy_area":
+            case "chaco_area":
+            case "banda_oriental_area":
+            case "guyana_area":
+            case "upper_guyana_area":
+            case "quito_area":
+            case "venezuela_area":
+            case "bogota_area":
+            case "cordillera_occidental_area":
+            case "antisuyu_area":
+            case "kuntisuyu_area":
+            case "peruan_coast":
+            case "chimor_area":
+            case "ucayali_area":
+            case "cajamarca_area":
+            case "huanuco_area":
+            case "upper_peru":
+            case "potosi_area":
+            case "great_woods_area":
+            case "iroquoisia_area":
+            case "south_iroquoisia_area":
+            case "susquehanna_area":
+            case "carolinas_area":
+            case "south_carolina_area":
+            case "upper_american_georgia_area":
+            case "north_florida_area":
+            case "south_appalachia_area":
+            case "west_florida_area":
+            case "mississippi_area":
+            case "choctaw_area":
+            case "alabama_area":
+            case "ohio_country_area":
+            case "miami_river_area":
+            case "illinois_country_area":
+            case "mississippi_plain_area":
+            case "lower_louisiana_area":
+            case "upper_louisiana_area":
+            case "central_plains_area":
+            case "dakota_area":
+            case "badlands_area":
+            case "texas_area":
+            case "columbia_river_area":
+            case "salish_sea_area":
+            case "interior_plateau_area":
+            case "newfoundland_area":
+            case "labrador_area":
+            case "cote_nord_area":
+            case "upper_canada_area":
+            case "huronia_area":
+            case "northeast_mexico_area":
+            case "durango_area":
+            case "chihuahua_area":
+            case "pecos_area":
+            case "rio_grande_area":
+            case "new_mexico_area":
+            case "apacheria_area":
+            case "colorado_plateau_area":
+            case "california_area":
+            case "jalisco_area":
+            case "nayarit_area":
+            case "michoacan_area":
+            case "tierra_caliente_area":
+            case "gran_chichimeca_area":
+            case "guanajuato_area":
+            case "zacatecas_area":
+            case "mexico_area":
+            case "puebla_area":
+            case "guerrero_area":
+            case "oaxaca_area":
+            case "mixteca_area":
+            case "eastern_mexico_area":
+            case "huasteca_area":
+            case "chiapas_area":
+            case "yucatan_area":
+            case "east_yucatan_area":
+            case "campeche_area":
+            case "guatemala_area":
+            case "guatemala_lowlands_area":
+            case "honduras_area":
+            case "nicaragua_area":
+            case "cuba_area":
+            case "east_cuba_area":
+            case "hispaniola_area":
+            case "dominica_area":
+            case "greater_antilles_area":
+            case "lucayan_area":
+            case "leeward_islands_area":
+            case "windward_islands_area":
+            case "unit_templates":
+            case "target_unit_id":
+            case "t_from":
+            case "t_to":
+            case "change_price":
+            case "nogoods":
+            case "grain":
+            case "wine":
+            case "wool":
+            case "cloth":
+            case "fish":
+            case "fur":
+            case "salt":
+            case "naval_supplies":
+            case "copper":
+            case "gold":
+            case "iron":
+            case "slaves":
+            case "ivory":
+            case "tea":
+            case "chinaware":
+            case "spices":
+            case "coffee":
+            case "cotton":
+            case "sugar":
+            case "tobacco":
+            case "cocoa":
+            case "silk":
+            case "dyes":
+            case "tropical_wood":
+            case "livestock":
+            case "incense":
+            case "glass":
+            case "paper":
+            case "gems":
+            case "coal":
+            case "unknown":
+            case "culture_group":
+            case "rebel_faction":
+            case "general":
+            case "army":
+            case "friend":
+            case "great_powers":
+            case "empire":
+            case "old_emperor":
+            case "celestial_empire":
+            case "decree":
+            case "trade_league":
+            case "religions":
+            case "noreligion":
+            case "catholic":
+            case "papacy":
+            case "anglican":
+            case "protestant":
+            case "reformed":
+            case "orthodox":
+            case "coptic":
+            case "sunni":
+            case "shiite":
+            case "ibadi":
+            case "buddhism":
+            case "vajrayana":
+            case "mahayana":
+            case "confucianism":
+            case "shinto":
+            case "hinduism":
+            case "sikhism":
+            case "animism":
+            case "shamanism":
+            case "totemism":
+            case "inti":
+            case "nahuatl":
+            case "mesoamerican_religion":
+            case "norse_pagan_reformed":
+            case "tengri_pagan_reformed":
+            case "jewish":
+            case "zoroastrian":
+            case "religion_instance_data":
+            case "christian":
+            case "muslim":
+            case "relation":
+            case "eastern":
+            case "dharmic":
+            case "pagan":
+            case "jewish_group":
+            case "zoroastrian_group":
+            case "active_cardinals":
+            case "cardinal":
+            case "invest_in_cardinal":
+            case "reformation_center":
+            case "fired_events":
+            case "pending_events":
+            case "nahuatl_events.1": //Todo all events ids
+                return DataType.OBJECT;
+
+            case "speed":
+            case "multiplayer_random_seed":
+            case "multiplayer_random_count":
+            case "unit":
+            case "unit_template_id":
+            case "num_collectors":
+            case "from":
+            case "province":
+            case "duration":
+            case "target_merge_province":
+            case "under_construction_queued":
+            case "seed":
+            case "rank":
+            case "government_rank":
+            case "reform_level":
+            case "hre_leagues_status":
+            case "hre_religion_status":
+            case "amount_of_provinces":
+            case "weighted_cardinal":
+            case "location":
+            case "province_id":
+            case "dead_roc":
+            case "random":
+            case "any_target_province":
+                return DataType.INT;
+
+            case "next_age_progress":
+            case "prosperity":
+            case "total_military_power":
+            case "average_military_power":
+            case "current":
+            case "local_value":
+            case "outgoing":
+            case "value_added_outgoing":
+            case "retention":
+            case "steer_power":
+            case "total":
+            case "p_pow":
+            case "max":
+            case "collector_power":
+            case "pull_power":
+            case "retain_power":
+            case "highest_power":
+            case "max_demand":
+            case "val":
+            case "prev":
+            case "max_pow":
+            case "add":
+            case "province_power":
+            case "power_fraction":
+            case "money":
+            case "already_sent":
+            case "power":
+            case "power_modifier":
+            case "potential":
+            case "potential_heir_religion":
+            case "civil_war_progress":
+            case "consort_dipVar":
+            case "consort_milVar":
+            case "new_ruler_culture":
+            case "new_ruler_religion":
+            case "other_advisor_religion":
+            case "num_converted_religion":
+            case "t_in":
+            case "t_out":
+            case "ship_power":
+            case "pirate_hunt":
+            case "privateer_mission":
+            case "privateer_money":
+            case "current_price":
+            case "total_privateer_power":
+            case "progress":
+            case "imperial_influence":
+            case "reform_desire":
+            case "papal_investment":
+            case "missionary_progress":
+            case "max_speed":
+                return DataType.FLOAT;
+
+            case "used_client_names":
+            case "players_countries":
+            case "top_power":
+            case "top_provinces":
+            case "potential_incidents":
+            case "\"germanic\"":
+            case "\"british\"":
+            case "\"french\"":
+            case "\"west_slavic\"":
+            case "\"carpathian\"":
+            case "\"baltic\"":
+            case "\"maghrebi\"":
+            case "\"iranian\"":
+            case "\"altaic\"":
+            case "\"malay\"":
+            case "\"southeastasian_group\"":
+            case "\"western_aryan\"":
+            case "\"southern_african\"":
+            case "\"great_lakes_group\"":
+            case "\"african\"":
+            case "\"cushitic\"":
+            case "\"evenks\"":
+                return DataType.LIST_STRING;
+
+            case "setgameplayoptions":
+            case "id_counters":
+            case "institution_origin":
+            case "institutions":
+            case "possible_provinces":
+            case "score_rank":
+                return DataType.LINE_INT;
+
+            case "institutions_penalties":
+            case "trade_goods_size":
+            case "top_power_values":
+            case "top_provinces_values":
+            case "tradegoods_total_produced":
+                return DataType.LINE_FLOAT;
+
+            case "production_leader_tag":
+            case "dynamic_countries":
+            case "electors":
+            case "members":
+            case "colony_claim":
+                return DataType.LINE_STRING;
+
+            case "has_trader":
+            case "has_state_patriach":
+            case "has_state_pasha":
+            case "has_capital":
+            case "trade_company_region":
+            case "recalc_defection":
+            case "imperial_ban_allowed":
+            case "internal_hre_cb":
+            case "hre_inheritable":
+            case "allows_female_emperor":
+            case "tbk":
+            case "hre_religion":
+            case "original_hre_religion":
+            case "hre_heretic_religion":
+            case "original_hre_heretic_religion":
+            case "papacy_active":
+            case "scope_is_valid":
+                return DataType.BOOL;
+
             default:
-                System.out.println("Unknown gamestate key: " + key);
+
+                if (!BANNED_WORDS.contains(key)) {
+                    System.out.println("Unknown gamestate key: " + key);
+                }
+
                 return DataType.UNKNOWN; //If UNKNOWN, DataType.getType(value), mostly because a key can have multiple types (ex: value)
         }
     }

@@ -12,7 +12,7 @@ public class DateData extends AbstractData<LocalDate> {
 
     @Override
     public String toSave(Integer indent) {
-        return "\t".repeat(indent) + this.key + "=" + this.value.format(Constants.DATE_FORMAT) + "\n";
+        return "\t".repeat(indent) + this.key + "=" + (this.value == null ? "1.1.1" : this.value.format(Constants.DATE_FORMAT)) + "\n";
     }
 
     @Override

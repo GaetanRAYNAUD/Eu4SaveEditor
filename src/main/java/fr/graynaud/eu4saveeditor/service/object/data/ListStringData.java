@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 public class ListStringData extends AbstractData<List<String>> {
 
     public ListStringData(String key, List<String> value) {
-        super(DataType.LIST_STRINGS, key, value);
+        super(DataType.LIST_STRING, key, value);
     }
 
     @Override

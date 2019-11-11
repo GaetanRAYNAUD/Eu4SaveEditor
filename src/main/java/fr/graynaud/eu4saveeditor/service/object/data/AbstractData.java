@@ -9,10 +9,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
                @JsonSubTypes.Type(value = DateData.class, name = "DATE"),
                @JsonSubTypes.Type(value = FloatData.class, name = "FLOAT"),
                @JsonSubTypes.Type(value = IntData.class, name = "INT"),
-               @JsonSubTypes.Type(value = ListFloatData.class, name = "LIST_FLOAT"),
-               @JsonSubTypes.Type(value = ListIntData.class, name = "LIST_INT"),
-               @JsonSubTypes.Type(value = ListObjectData.class, name = "LIST_OBJECTS"),
-               @JsonSubTypes.Type(value = ListStringData.class, name = "LIST_STRINGS"),
+               @JsonSubTypes.Type(value = LineFloatData.class, name = "LINE_FLOAT"),
+               @JsonSubTypes.Type(value = LineIntData.class, name = "LINE_INT"),
+               @JsonSubTypes.Type(value = LineStringData.class, name = "LINE_STRING"),
+               @JsonSubTypes.Type(value = ListObjectData.class, name = "LIST_OBJECT"),
+               @JsonSubTypes.Type(value = ListStringData.class, name = "LIST_STRING"),
                @JsonSubTypes.Type(value = ObjectData.class, name = "OBJECT"),
                @JsonSubTypes.Type(value = StringData.class, name = "STRING")})
 public abstract class AbstractData<T> {

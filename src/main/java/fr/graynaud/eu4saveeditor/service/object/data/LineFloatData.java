@@ -1,14 +1,14 @@
 package fr.graynaud.eu4saveeditor.service.object.data;
 
-import fr.graynaud.eu4saveeditor.common.NumberUtils;
+import fr.graynaud.eu4saveeditor.common.Utils;
 
 import java.util.List;
 import java.util.Objects;
 
-public class ListFloatData extends AbstractData<List<Double>> {
+public class LineFloatData extends AbstractData<List<Double>> {
 
-    public ListFloatData(String key, List<Double> value) {
-        super(DataType.LIST_FLOAT, key, value);
+    public LineFloatData(String key, List<Double> value) {
+        super(DataType.LINE_FLOAT, key, value);
     }
 
     @Override
@@ -17,7 +17,7 @@ public class ListFloatData extends AbstractData<List<Double>> {
         stringBuilder.append("\t".repeat(indent)).append(this.key).append("={\n");
 
         stringBuilder.append("\t".repeat(indent));
-        this.value.forEach(aDouble -> stringBuilder.append(NumberUtils.prettyFloat(aDouble)).append(" "));
+        this.value.forEach(aDouble -> stringBuilder.append(Utils.prettyFloat(aDouble)).append(" "));
         stringBuilder.append("\n");
 
         stringBuilder.append("\t".repeat(indent)).append("}\n");

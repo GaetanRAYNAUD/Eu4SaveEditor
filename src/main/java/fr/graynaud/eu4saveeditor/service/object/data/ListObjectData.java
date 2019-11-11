@@ -5,7 +5,7 @@ import java.util.List;
 public class ListObjectData extends AbstractData<List<ObjectData>> {
 
     public ListObjectData(String key, List<ObjectData> value) {
-        super(DataType.LIST_OBJECTS, key, value);
+        super(DataType.LIST_OBJECT, key, value);
     }
 
     @Override

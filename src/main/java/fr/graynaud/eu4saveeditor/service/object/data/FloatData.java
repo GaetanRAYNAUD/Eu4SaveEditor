@@ -1,6 +1,6 @@
 package fr.graynaud.eu4saveeditor.service.object.data;
 
-import fr.graynaud.eu4saveeditor.common.NumberUtils;
+import fr.graynaud.eu4saveeditor.common.Utils;
 
 public class FloatData extends AbstractData<Double> {
 
@@ -10,7 +10,7 @@ public class FloatData extends AbstractData<Double> {
 
     @Override
     public String toSave(Integer indent) {
-        return "\t".repeat(indent) + this.key + "=" + NumberUtils.prettyFloat(this.value) + "\n";
+        return "\t".repeat(indent) + this.key + "=" + Utils.prettyFloat(this.value) + "\n";
     }
 
     @Override
