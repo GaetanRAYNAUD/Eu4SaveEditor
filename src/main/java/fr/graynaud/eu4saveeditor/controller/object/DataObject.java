@@ -1,28 +1,22 @@
 package fr.graynaud.eu4saveeditor.controller.object;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.graynaud.eu4saveeditor.common.Constants;
 import fr.graynaud.eu4saveeditor.service.object.data.AbstractData;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
+@JsonSerialize(using = DataObjectSerializer.class)
 public class DataObject {
 
     private String fileName;
 
-    private Map<String, AbstractData> meta;
+    private List<AbstractData> meta;
 
-    private Map<String, AbstractData> gamestate;
+    private List<AbstractData> gamestate;
 
-    private Map<String, AbstractData> ai;
-
-    @JsonIgnore
-    private Map<String, Integer> duplications = new HashMap<>();
+    private List<AbstractData> ai;
 
     public String getFileName() {
         return fileName;
@@ -33,7 +27,7 @@ public class DataObject {
         return this;
     }
 
-    public Map<String, AbstractData> getMeta() {
+    public List<AbstractData> getMeta() {
         return meta;
     }
 
@@ -43,29 +37,9 @@ public class DataObject {
 
         stringBuilder.append(Constants.STARTING_TEXT).append("\n");
 
-        meta.forEach((key, data) -> {
-            stringBuilder.append(data.toSave(0));
-        });
+        meta.forEach(data -> stringBuilder.append(data.toSave(0)));
 
         return stringBuilder.toString().trim();
-    }
-
-    @JsonIgnore
-    public void setMeta(List<AbstractData> meta) {
-        if (meta != null && !meta.isEmpty()) {
-            this.meta = meta.stream()
-                            .collect(Collectors.toMap(AbstractData::getKey, a -> a, this::handleDuplication,
-                                                      LinkedHashMap::new));
-        }
-    }
-
-    @JsonSetter("meta")
-    public void setMeta(Map<String, AbstractData> meta) {
-        this.meta = meta;
-    }
-
-    public Map<String, AbstractData> getGamestate() {
-        return gamestate;
     }
 
     @JsonIgnore
@@ -74,29 +48,9 @@ public class DataObject {
 
         stringBuilder.append(Constants.STARTING_TEXT).append("\n");
 
-        gamestate.forEach((key, data) -> {
-            stringBuilder.append(data.toSave(0));
-        });
+        gamestate.forEach(data -> stringBuilder.append(data.toSave(0)));
 
         return stringBuilder.toString().trim();
-    }
-
-    @JsonIgnore
-    public void setGamestate(List<AbstractData> gamestate) {
-        if (gamestate != null && !gamestate.isEmpty()) {
-            this.gamestate = gamestate.stream()
-                                      .collect(Collectors.toMap(AbstractData::getKey, a -> a, this::handleDuplication,
-                                                                LinkedHashMap::new));
-        }
-    }
-
-    @JsonSetter("gamestate")
-    public void setGamestate(Map<String, AbstractData> gamestate) {
-        this.gamestate = gamestate;
-    }
-
-    public Map<String, AbstractData> getAi() {
-        return ai;
     }
 
     @JsonIgnore
@@ -105,32 +59,28 @@ public class DataObject {
 
         stringBuilder.append(Constants.STARTING_TEXT).append("\n");
 
-        ai.forEach((key, data) -> {
-            stringBuilder.append(data.toSave(0));
-        });
+        ai.forEach(data -> stringBuilder.append(data.toSave(0)));
 
         return stringBuilder.toString().trim();
     }
 
-    @JsonIgnore
+    public void setMeta(List<AbstractData> meta) {
+        this.meta = meta;
+    }
+
+    public List<AbstractData> getGamestate() {
+        return gamestate;
+    }
+
+    public void setGamestate(List<AbstractData> gamestate) {
+        this.gamestate = gamestate;
+    }
+
+    public List<AbstractData> getAi() {
+        return ai;
+    }
+
     public void setAi(List<AbstractData> ai) {
-        if (ai != null && !ai.isEmpty()) {
-            this.ai = ai.stream()
-                        .collect(Collectors.toMap(AbstractData::getKey, a -> a, this::handleDuplication,
-                                                  LinkedHashMap::new));
-        }
-    }
-
-    @JsonSetter("ai")
-    public void setAi(Map<String, AbstractData> ai) {
         this.ai = ai;
-    }
-
-    @JsonIgnore
-    private AbstractData handleDuplication(AbstractData u, AbstractData v) {
-        Integer duplication = duplications.getOrDefault(u.getKey(), 1);
-        u.setKey(u.getKey() + Constants.DUPLICATION_KEY + duplication);
-        duplications.put(v.getKey(), ++duplication);
-        return u;
     }
 }
