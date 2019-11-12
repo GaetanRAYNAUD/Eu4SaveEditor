@@ -26,10 +26,15 @@ public class SaveServiceImpl implements SaveService {
 
     //TODO weird object with no value 'property_appraiser'
 
-    //TODO add TagData extends StringData (default is '---')
+    //TODO add TagData extends StringData (default is '---') + ListTagData
+    //TODO Same for all specific data ? (ex: culture, religions, goods, etc..., will be easier to do a dropdown in front)
     //TODO add ProvinceIdData extends IntData
     //TODO add ProgressData extends FloatData (Front = progress bar)
+    //TODO add ListBoolData (ex: buildings)
     //TODO parent key for type to be more accurate ?
+
+    //Fixme institutions not detected as LINE_INT
+    //Fixme dynasty.dynasty not detected as LIST_STRING
 
     @Override
     public DataObject saveToData(MultipartFile multipartFile) throws IOException {
@@ -201,7 +206,12 @@ public class SaveServiceImpl implements SaveService {
             case LINE_INT:
             case LINE_FLOAT:
             case LINE_STRING:
-                index += 2;
+                if (content.substring(index, index + 2).equals("{\n")) {
+                    index += 2;
+                } else if (content.substring(index, index + 1).equals("{")) {
+                    index += 1;
+                }
+
                 AtomicInteger subIndex = new AtomicInteger();
                 String dataContent;
 

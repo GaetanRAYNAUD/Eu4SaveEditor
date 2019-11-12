@@ -1,6 +1,8 @@
 package fr.graynaud.eu4saveeditor.common;
 
 import fr.graynaud.eu4saveeditor.service.object.data.DataType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -8,7 +10,9 @@ import java.util.stream.Stream;
 
 public final class Keys {
 
-    //Keys I know why does not have a type
+    private static final Logger LOGGER = LoggerFactory.getLogger(Keys.class);
+
+    //Keys I know have multiple possible types DO NOT ADD IN SWITCH
     private static final Set<String> BANNED_WORDS = Stream.of("type", "id", "value", "REB", "PIR", "NAT", "SWE", "DAN",
                                                               "FIN", "GOT", "NOR", "SHL", "SCA", "EST", "LVA", "SMI",
                                                               "KRL", "ICE", "ACH", "ALB", "ATH", "BOS", "BUL", "BYZ",
@@ -101,11 +105,17 @@ public final class Keys {
                                                               "JMN", "ROM", "JOM", "HAH", "ISR", "TEM", "TRL", "YKT",
                                                               "YAQ", "TAI", "MIS", "MSC", "ZNI", "XAL", "HSI", "MKA",
                                                               "MMA", "DNG", "EJZ", "NVK", "C00", "C01", "C02", "C03",
-                                                              "modifier", "light_ship", "dynasty", "continent", "original",
-                                                              "provinces", "C04", "C05", "C06", "C07", "C08", "C09",
-                                                              "C10", "C11", "C12", "C13", "C14", "C15", "government",
-                                                              "defender",
-                                                              "leader", "active", "trade").collect(Collectors.toSet());
+                                                              "modifier", "light_ship", "dynasty", "continent",
+                                                              "original", "provinces", "C04", "C05", "C06", "C07",
+                                                              "C08", "C09", "C10", "C11", "C12", "C13", "C14", "C15",
+                                                              "O00", "O01", "O02", "O03", "O04", "O05", "O06", "O07",
+                                                              "O08", "O09", "government", "defender", "leader",
+                                                              "active", "trade", "institutions", "estate", "capital",
+                                                              "fort_15th", "discovered_by", "unit", "action",
+                                                              "workshop", "attacker", "barracks", "envoy", "fort_16th",
+                                                              "marketplace", "regimental_camp", "shipyard",
+                                                              "spy_network", "temple", "textile", "tradecompany",
+                                                              "weapons", "wharf", "controller").collect(Collectors.toSet());
 
     private Keys() {
     }
@@ -155,8 +165,8 @@ public final class Keys {
                 return DataType.LIST_OBJECT;
 
             default:
-                if (!BANNED_WORDS.contains(key)) {
-                    System.out.println("Unknown meta key: " + key);
+                if (LOGGER.isDebugEnabled() && !BANNED_WORDS.contains(key)) {
+                    LOGGER.debug("Unknown meta key: " + key);
                 }
 
                 return DataType.UNKNOWN; //If UNKNOWN, DataType.getType(value), mostly because a key can have multiple types (ex: value)
@@ -1384,8 +1394,8 @@ public final class Keys {
                 return DataType.BOOL;
 
             default:
-                if (!BANNED_WORDS.contains(key)) {
-                    System.out.println("Unknown ai key: " + key);
+                if (LOGGER.isDebugEnabled() && !BANNED_WORDS.contains(key)) {
+                    LOGGER.debug("Unknown ai key: " + key);
                 }
 
                 return DataType.UNKNOWN; //If UNKNOWN, DataType.getType(value), mostly because a key can have multiple types (ex: value)
@@ -1442,6 +1452,9 @@ public final class Keys {
             case "last_excom":
             case "birth_date":
             case "defender_date":
+            case "last_estate_grant":
+            case "last_looted":
+            case "province_had_influenza":
                 return DataType.DATE;
 
             case "current_age":
@@ -1462,9 +1475,19 @@ public final class Keys {
             case "first":
             case "second":
             case "crusade_target":
-            case "controller":
             case "previous_controller":
             case "owner":
+            case "original_culture":
+            case "original_religion":
+            case "add_core":
+            case "trade_goods":
+            case "action_token":
+            case "actor":
+            case "likely_rebels":
+            case "recipient":
+            case "territorial_core":
+            case "hostile_core_creation_tag":
+            case "hostile_core_creation_desc":
                 return DataType.STRING;
 
             case "gameplaysettings":
@@ -2201,12 +2224,22 @@ public final class Keys {
             case "fired_events":
             case "pending_events":
             case "nahuatl_events.1": //Todo all events ids
+            case "buildings":
+            case "building_builders":
+            case "history":
+            case "advisor":
+            case "discovery_dates2":
+            case "discovery_religion_dates2":
+            case "building_construction":
+            case "diplomacy_construction":
+            case "merchant_construction":
+            case "spy_actions":
+            case "latent_trade_goods":
                 return DataType.OBJECT;
 
             case "speed":
             case "multiplayer_random_seed":
             case "multiplayer_random_count":
-            case "unit":
             case "unit_template_id":
             case "num_collectors":
             case "from":
@@ -2227,6 +2260,23 @@ public final class Keys {
             case "dead_roc":
             case "random":
             case "any_target_province":
+            case "skill":
+            case "patrol":
+            case "improve_count":
+            case "winter":
+            case "previous_winter":
+            case "center_of_trade":
+            case "builder":
+            case "building":
+            case "direction":
+            case "fort_influencing":
+            case "from_province":
+            case "nationalism":
+            case "native_ferocity":
+            case "native_hostileness":
+            case "original_total":
+            case "to":
+            case "to_province":
                 return DataType.INT;
 
             case "next_age_progress":
@@ -2280,6 +2330,18 @@ public final class Keys {
             case "papal_investment":
             case "missionary_progress":
             case "max_speed":
+            case "base_tax":
+            case "base_production":
+            case "base_manpower":
+            case "trade_power":
+            case "cost":
+            case "devastation":
+            case "extra_cost":
+            case "garrison":
+            case "local_autonomy":
+            case "native_size":
+            case "original_tax":
+            case "hostile_core_creation_cost":
                 return DataType.FLOAT;
 
             case "used_client_names":
@@ -2304,12 +2366,14 @@ public final class Keys {
             case "\"african\"":
             case "\"cushitic\"":
             case "\"evenks\"":
+            case "cores":
+            case "claims":
+            case "discovered_by":
                 return DataType.LIST_STRING;
 
             case "setgameplayoptions":
             case "id_counters":
             case "institution_origin":
-            case "institutions":
             case "possible_provinces":
             case "score_rank":
                 return DataType.LINE_INT;
@@ -2345,12 +2409,22 @@ public final class Keys {
             case "original_hre_heretic_religion":
             case "papacy_active":
             case "scope_is_valid":
+            case "center_of_religion":
+            case "hre":
+            case "is_city":
+            case "discover":
+            case "hre_liberated":
+            case "mothball_command":
+            case "once":
+            case "permanent":
+            case "ub":
+            case "user_changed_name":
                 return DataType.BOOL;
 
             default:
 
-                if (!BANNED_WORDS.contains(key)) {
-                    System.out.println("Unknown gamestate key: " + key);
+                if (LOGGER.isDebugEnabled() && !BANNED_WORDS.contains(key)) {
+                    LOGGER.debug("Unknown gamestate key: " + key);
                 }
 
                 return DataType.UNKNOWN; //If UNKNOWN, DataType.getType(value), mostly because a key can have multiple types (ex: value)

@@ -11,6 +11,11 @@ public class StringData extends AbstractData<String> {
         this.hasQuotes = Utils.hasQuotes(value);
     }
 
+    protected StringData(DataType type, String key, String value) {
+        super(type, key, value);
+        this.hasQuotes = Utils.hasQuotes(this.value);
+    }
+
     public Boolean getHasQuotes() {
         return hasQuotes;
     }
