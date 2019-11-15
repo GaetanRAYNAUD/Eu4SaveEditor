@@ -3,19 +3,25 @@ package fr.graynaud.eu4saveeditor.common;
 import fr.graynaud.eu4saveeditor.service.object.data.DataType;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
 public enum SaveFile {
-    AI("ai", Keys::getTypeAi), GAMESTATE("gamestate", Keys::getTypeGamestate), META("meta", Keys::getTypeMeta);
+    AI("ai", Keys::getTypeAi, Keys::ignoredKeyAIContains),
+    GAMESTATE("gamestate", Keys::getTypeGamestate, Keys::ignoredKeyGamestateContains),
+    META("meta", Keys::getTypeMeta, Keys::ignoredKeyMetaContains);
 
     public final String fileName;
 
     public final Function<String, DataType> getType;
 
-    SaveFile(String fileName, Function<String, DataType> getType) {
+    public final Function<String, Boolean> ignoredKeys;
+
+    SaveFile(String fileName, Function<String, DataType> getType, Function<String, Boolean> ignoredKeys) {
         this.fileName = fileName;
         this.getType = getType;
+        this.ignoredKeys = ignoredKeys;
     }
 
     public static boolean isValidFile(String fileName) {

@@ -115,9 +115,30 @@ public final class Keys {
                                                               "workshop", "attacker", "barracks", "envoy", "fort_16th",
                                                               "marketplace", "regimental_camp", "shipyard",
                                                               "spy_network", "temple", "textile", "tradecompany",
-                                                              "weapons", "wharf", "controller").collect(Collectors.toSet());
+                                                              "weapons", "wharf", "controller")
+                                                          .collect(Collectors.toSet());
+
+    private static final Set<String> GAMESTATE_IGNORED_KEYS = Stream.of("trade={", "unit_templates={",
+                                                                        "used_client_names={", "id_counters={",
+                                                                        "production_leader_tag={",
+                                                                        "dynamic_countries={",
+                                                                        "tradegoods_total_produced={", "dynasty={",
+                                                                        "great_powers={", "income_statistics={", "nation_size_statistics={", "score_statistics={", "inflation_statistics={")
+                                                                    .collect(Collectors.toSet());
 
     private Keys() {
+    }
+
+    public static Boolean ignoredKeyAIContains(String key) {
+        return false;
+    }
+
+    public static Boolean ignoredKeyGamestateContains(String key) {
+        return GAMESTATE_IGNORED_KEYS.contains(key);
+    }
+
+    public static Boolean ignoredKeyMetaContains(String key) {
+        return false;
     }
 
     public static DataType getTypeMeta(String key) {

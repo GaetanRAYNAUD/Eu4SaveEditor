@@ -3,19 +3,20 @@ package fr.graynaud.eu4saveeditor.service.object.data;
 import java.util.regex.Pattern;
 
 public enum DataType {
-    STRING(Pattern.compile("\".*\"")),
+    STRING(Pattern.compile("\"?[a-z][A-Z]+\"?")),
     FLOAT(Pattern.compile("^[-+]?[0-9]+\\.[0-9]+$")),
     INT(Pattern.compile("^[-+]?[0-9]+$")),
     BOOL(Pattern.compile("^yes|no$")),
     OBJECT(Pattern.compile("\\{.*", Pattern.DOTALL)),
-    LINE_INT(Pattern.compile("^[-+]?[0-9]+( [-+]?[0-9]+)*$")),
-    LINE_FLOAT(Pattern.compile("^[-+]?[0-9]+\\.[0-9]+( [-+]?[0-9]+\\.[0-9]+)*$")),
-    LINE_STRING(Pattern.compile("^\\w+( \\w+)*$")),
-    LIST_OBJECT(Pattern.compile("\\{.*\n.*}", Pattern.DOTALL)),
-    LIST_STRING(Pattern.compile("\".*\n.*\"")),
-    DATE(Pattern.compile("^[0-9]{0,4}.[0-9]{1,2}.[0-9]{1,2}$")),
+    LINE_INT(Pattern.compile("^\\{\n*\t*[-+]?[0-9]+( [-+]?[0-9]+)*$", Pattern.DOTALL)),
+    LINE_FLOAT(Pattern.compile("^\\{\n*\t*[-+]?[0-9]+\\.[0-9]+( [-+]?[0-9]+\\.[0-9]+)*$", Pattern.DOTALL)),
+    LINE_STRING(Pattern.compile("^\\{\n*\t*\\w+( \\w+)*$", Pattern.DOTALL)),
+    LIST_OBJECT(Pattern.compile("^\\{.*}\n\t*\\{.*$", Pattern.DOTALL)),
+    LIST_STRING(Pattern.compile("\\{\n*\t*\".*\n.*\"\n", Pattern.DOTALL)),
+    DATE(Pattern.compile("^[0-9]{4}.[0-9]{1,2}.[0-9]{1,2}$")),
     TAG(Pattern.compile("^\"?[A-Z]{3}\"?$")),
-    UNKNOWN(null);
+    UNKNOWN(null),
+    NOT_PARSED(null);
 
     public final Pattern pattern;
 
@@ -25,10 +26,6 @@ public enum DataType {
 
     public static DataType getType(String s) {
         s = s.trim();
-
-        if (DataType.BOOL.pattern.matcher(s).matches()) {
-            return DataType.BOOL;
-        }
 
         if (DataType.INT.pattern.matcher(s).matches()) {
             return DataType.INT;
@@ -40,10 +37,6 @@ public enum DataType {
 
         if (DataType.DATE.pattern.matcher(s).matches()) {
             return DataType.DATE;
-        }
-
-        if (DataType.TAG.pattern.matcher(s).matches()) {
-            return DataType.TAG;
         }
 
         if (DataType.LINE_FLOAT.pattern.matcher(s).matches()) {
@@ -70,10 +63,14 @@ public enum DataType {
             return DataType.OBJECT;
         }
 
-        if (DataType.STRING.pattern.matcher(s).matches()) {
-            return DataType.STRING;
+        if (DataType.BOOL.pattern.matcher(s).matches()) {
+            return DataType.BOOL;
         }
 
-        return DataType.UNKNOWN;
+        if (DataType.TAG.pattern.matcher(s).matches()) {
+            return DataType.TAG;
+        }
+
+        return DataType.STRING;
     }
 }
