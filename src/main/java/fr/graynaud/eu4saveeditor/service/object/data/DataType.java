@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 public enum DataType {
     STRING(Pattern.compile("\"?[a-z][A-Z]+\"?")),
     FLOAT(Pattern.compile("^[-+]?[0-9]+\\.[0-9]+$")),
-    INT(Pattern.compile("^[-+]?[0-9]+$")),
+    LONG(Pattern.compile("^[-+]?[0-9]+$")),
     BOOL(Pattern.compile("^yes|no$")),
     OBJECT(Pattern.compile("\\{.*", Pattern.DOTALL)),
     LINE_INT(Pattern.compile("^\\{\n*\t*[-+]?[0-9]+( [-+]?[0-9]+)*$", Pattern.DOTALL)),
@@ -27,8 +27,8 @@ public enum DataType {
     public static DataType getType(String s) {
         s = s.trim();
 
-        if (DataType.INT.pattern.matcher(s).matches()) {
-            return DataType.INT;
+        if (DataType.LONG.pattern.matcher(s).matches()) {
+            return DataType.LONG;
         }
 
         if (DataType.FLOAT.pattern.matcher(s).matches()) {

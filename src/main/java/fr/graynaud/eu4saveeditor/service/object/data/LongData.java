@@ -1,9 +1,9 @@
 package fr.graynaud.eu4saveeditor.service.object.data;
 
-public class IntData extends AbstractData<Integer> {
+public class LongData extends AbstractData<Long> {
 
-    public IntData(String key, Integer value) {
-        super(DataType.INT, key, value);
+    public LongData(String key, Long value) {
+        super(DataType.LONG, key, value);
     }
 
     @Override

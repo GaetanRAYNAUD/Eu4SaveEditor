@@ -26,7 +26,7 @@ public class Meta {
 
     private StringData campaignId;
 
-    private IntData campaignLength;
+    private LongData campaignLength;
 
     private ListObjectData campaignStats;
 
@@ -120,11 +120,11 @@ public class Meta {
         this.campaignId = campaignId;
     }
 
-    public IntData getCampaignLength() {
+    public LongData getCampaignLength() {
         return campaignLength;
     }
 
-    public void setCampaignLength(IntData campaignLength) {
+    public void setCampaignLength(LongData campaignLength) {
         this.campaignLength = campaignLength;
     }
 

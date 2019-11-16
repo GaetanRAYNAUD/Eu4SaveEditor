@@ -1,14 +1,14 @@
 package fr.graynaud.eu4saveeditor.service.object.save;
 
 import fr.graynaud.eu4saveeditor.service.object.data.FloatData;
-import fr.graynaud.eu4saveeditor.service.object.data.IntData;
+import fr.graynaud.eu4saveeditor.service.object.data.LongData;
 import fr.graynaud.eu4saveeditor.service.object.data.StringData;
 
 public class CampaignStats {
 
-    private IntData id;
+    private LongData id;
 
-    private IntData comparison;
+    private LongData comparison;
 
     private StringData key;
 
@@ -16,21 +16,21 @@ public class CampaignStats {
 
     private FloatData value;
 
-    private IntData sampleCount;
+    private LongData sampleCount;
 
-    public IntData getId() {
+    public LongData getId() {
         return id;
     }
 
-    public void setId(IntData id) {
+    public void setId(LongData id) {
         this.id = id;
     }
 
-    public IntData getComparison() {
+    public LongData getComparison() {
         return comparison;
     }
 
-    public void setComparison(IntData comparison) {
+    public void setComparison(LongData comparison) {
         this.comparison = comparison;
     }
 
@@ -58,11 +58,11 @@ public class CampaignStats {
         this.value = value;
     }
 
-    public IntData getSampleCount() {
+    public LongData getSampleCount() {
         return sampleCount;
     }
 
-    public void setSampleCount(IntData sampleCount) {
+    public void setSampleCount(LongData sampleCount) {
         this.sampleCount = sampleCount;
     }
 }

@@ -24,11 +24,9 @@ import java.util.stream.Collectors;
 @Service
 public class SaveServiceImpl implements SaveService {
 
-    private static final int MAX_TRY = 1000000;
+    private static final int MAX_TRY = 10000;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SaveServiceImpl.class);
-
-    //TODO weird object with no value 'property_appraiser'
 
     //TODO add TagData extends StringData (default is '---') + ListTagData
     //TODO Same for all specific data ? (ex: culture, religions, goods, etc..., will be easier to do a dropdown in front)
@@ -47,9 +45,6 @@ public class SaveServiceImpl implements SaveService {
         DataObject dataObject = new DataObject();
 
         filesContent.forEach((saveFile, content) -> {
-            if (saveFile != SaveFile.GAMESTATE) {
-                return;
-            }
             attempts.set(0);
             List<AbstractData> data = new ArrayList<>();
 
@@ -172,7 +167,7 @@ public class SaveServiceImpl implements SaveService {
             return dataIndex;
         }
 
-        return new DataIndex(line.length(), null);
+        return new DataIndex(line.length(), new StringData(line.trim(), null));
     }
 
     private DataIndex manageValue(DataType type, String content, int index, int endOfLine, String key,
@@ -181,7 +176,7 @@ public class SaveServiceImpl implements SaveService {
         switch (type) {
             case STRING:
             case DATE:
-            case INT:
+            case LONG:
             case FLOAT:
             case BOOL:
                 String value = content.substring(index, endOfLine).trim();
@@ -202,8 +197,8 @@ public class SaveServiceImpl implements SaveService {
                         data = new DateData(key, localDate);
                         break;
 
-                    case INT:
-                        data = new IntData(key, Integer.valueOf(value));
+                    case LONG:
+                        data = new LongData(key, Long.valueOf(value));
                         break;
 
                     case FLOAT:

@@ -28,6 +28,10 @@ public final class Utils {
     }
 
     public static boolean hasQuotes(String s) {
+        if (s== null || s.isEmpty()) {
+            return false;
+        }
+
         return s.startsWith("\"") && s.endsWith("\"");
     }
 }

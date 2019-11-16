@@ -168,7 +168,7 @@ public final class Keys {
             case "id":
             case "comparison":
             case "sample_count":
-                return DataType.INT;
+                return DataType.LONG;
 
             case "slander_merchants":
                 return DataType.FLOAT;
@@ -1404,7 +1404,7 @@ public final class Keys {
             case "base":
             case "staging_province":
             case "target":
-                return DataType.INT;
+                return DataType.LONG;
 
             case "fabricate_claim":
             case "slander_merchants":
@@ -2298,7 +2298,7 @@ public final class Keys {
             case "original_total":
             case "to":
             case "to_province":
-                return DataType.INT;
+                return DataType.LONG;
 
             case "next_age_progress":
             case "prosperity":

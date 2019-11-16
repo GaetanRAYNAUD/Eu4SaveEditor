@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import java.util.UUID;
+
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({@JsonSubTypes.Type(value = BoolData.class, name = "BOOL"),
                @JsonSubTypes.Type(value = DateData.class, name = "DATE"),
                @JsonSubTypes.Type(value = FloatData.class, name = "FLOAT"),
-               @JsonSubTypes.Type(value = IntData.class, name = "INT"),
+               @JsonSubTypes.Type(value = LongData.class, name = "INT"),
                @JsonSubTypes.Type(value = LineFloatData.class, name = "LINE_FLOAT"),
                @JsonSubTypes.Type(value = LineIntData.class, name = "LINE_INT"),
                @JsonSubTypes.Type(value = LineStringData.class, name = "LINE_STRING"),
@@ -17,6 +19,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
                @JsonSubTypes.Type(value = ObjectData.class, name = "OBJECT"),
                @JsonSubTypes.Type(value = StringData.class, name = "STRING")})
 public abstract class AbstractData<T> {
+
+    private Long id = UUID.randomUUID().getLeastSignificantBits();
 
     private DataType type;
 
@@ -39,6 +43,10 @@ public abstract class AbstractData<T> {
 
     public String getKey() {
         return key;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setType(DataType type) {

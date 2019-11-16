@@ -26,7 +26,7 @@ public class StringData extends AbstractData<String> {
 
     @Override
     public String toSave(Integer indent) {
-        return "\t".repeat(indent) + this.key + "=" + (this.hasQuotes ? "\"" : "") + this.value + (this.hasQuotes ? "\"" : "") + "\n";
+        return "\t".repeat(indent) + this.key + (this.value == null ? "" : "=" + (this.hasQuotes ? "\"" : "") + this.value + (this.hasQuotes ? "\"" : "")) + "\n";
     }
 
     @Override
