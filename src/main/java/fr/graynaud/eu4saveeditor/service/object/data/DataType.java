@@ -6,15 +6,19 @@ public enum DataType {
     STRING(Pattern.compile("\"?[a-z][A-Z]+\"?")),
     FLOAT(Pattern.compile("^[-+]?[0-9]+\\.[0-9]+$")),
     LONG(Pattern.compile("^[-+]?[0-9]+$")),
+    PROVINCE_ID(null),
     BOOL(Pattern.compile("^yes|no$")),
     OBJECT(Pattern.compile("\\{.*", Pattern.DOTALL)),
-    LINE_INT(Pattern.compile("^\\{\n*\t*[-+]?[0-9]+( [-+]?[0-9]+)*$", Pattern.DOTALL)),
+    LINE_LONG(Pattern.compile("^\\{\n*\t*[-+]?[0-9]+( [-+]?[0-9]+)*$", Pattern.DOTALL)),
+    LINE_PROVINCE_ID(null),
     LINE_FLOAT(Pattern.compile("^\\{\n*\t*[-+]?[0-9]+\\.[0-9]+( [-+]?[0-9]+\\.[0-9]+)*$", Pattern.DOTALL)),
     LINE_STRING(Pattern.compile("^\\{\n*\t*\\w+( \\w+)*$", Pattern.DOTALL)),
+    LINE_TAG(Pattern.compile("^\\{\n*\t*(([A-Z0-9]{3})|([-]{3}))( (([A-Z0-9]{3})|([-]{3})))*$", Pattern.DOTALL)),
     LIST_OBJECT(Pattern.compile("^\\{.*}\n\t*\\{.*$", Pattern.DOTALL)),
     LIST_STRING(Pattern.compile("\\{\n*\t*\".*\n.*\"\n", Pattern.DOTALL)),
+    LIST_TAG(Pattern.compile("\\{\n*\t*(\"?(([A-Z0-9]{3})|([-]{3}))\"?)(\n*\t*\"?(([A-Z0-9]{3})|([-]{3}))\"?)*", Pattern.DOTALL)),
     DATE(Pattern.compile("^[0-9]{4}.[0-9]{1,2}.[0-9]{1,2}$")),
-    TAG(Pattern.compile("^\"?[A-Z]{3}\"?$")),
+    TAG(Pattern.compile("^\"?([A-Z0-9]{3})|([-]{3})\"?$")),
     UNKNOWN(null),
     NOT_PARSED(null);
 
@@ -43,12 +47,20 @@ public enum DataType {
             return DataType.LINE_FLOAT;
         }
 
-        if (DataType.LINE_INT.pattern.matcher(s).matches()) {
-            return DataType.LINE_INT;
+        if (DataType.LINE_LONG.pattern.matcher(s).matches()) {
+            return DataType.LINE_LONG;
+        }
+
+        if (DataType.LINE_TAG.pattern.matcher(s).matches()) {
+            return DataType.LINE_STRING;
         }
 
         if (DataType.LINE_STRING.pattern.matcher(s).matches()) {
             return DataType.LINE_STRING;
+        }
+
+        if (DataType.LIST_TAG.pattern.matcher(s).matches()) {
+            return DataType.LIST_STRING;
         }
 
         if (DataType.LIST_STRING.pattern.matcher(s).matches()) {

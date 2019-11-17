@@ -147,7 +147,6 @@ public final class Keys {
                 return DataType.DATE;
 
             case "save_game":
-            case "player":
             case "displayed_country_name":
             case "campaign_id":
             case "checksum":
@@ -156,6 +155,9 @@ public final class Keys {
             case "selector":
             case "localization":
                 return DataType.STRING;
+
+            case "player":
+                return DataType.TAG;
 
             case "savegame_version":
                 return DataType.OBJECT;
@@ -1480,36 +1482,38 @@ public final class Keys {
 
             case "current_age":
             case "area":
-            case "country":
             case "which":
             case "definitions":
             case "trading_policy":
             case "name":
-            case "tag":
             case "key":
             case "heretic":
             case "religion":
             case "culture":
             case "independence":
-            case "emperor":
-            case "papal_state":
             case "first":
             case "second":
-            case "crusade_target":
-            case "previous_controller":
-            case "owner":
             case "original_culture":
             case "original_religion":
-            case "add_core":
             case "trade_goods":
             case "action_token":
             case "actor":
             case "likely_rebels":
             case "recipient":
-            case "territorial_core":
-            case "hostile_core_creation_tag":
             case "hostile_core_creation_desc":
                 return DataType.STRING;
+
+            case "country":
+            case "emperor":
+            case "tag":
+            case "papal_state":
+            case "crusade_target":
+            case "previous_controller":
+            case "owner":
+            case "add_core":
+            case "territorial_core":
+            case "hostile_core_creation_tag":
+                return DataType.TAG;
 
             case "gameplaysettings":
             case "saved_event_target":
@@ -2261,12 +2265,8 @@ public final class Keys {
             case "speed":
             case "multiplayer_random_seed":
             case "multiplayer_random_count":
-            case "unit_template_id":
             case "num_collectors":
-            case "from":
-            case "province":
             case "duration":
-            case "target_merge_province":
             case "under_construction_queued":
             case "seed":
             case "rank":
@@ -2276,8 +2276,6 @@ public final class Keys {
             case "hre_religion_status":
             case "amount_of_provinces":
             case "weighted_cardinal":
-            case "location":
-            case "province_id":
             case "dead_roc":
             case "random":
             case "any_target_province":
@@ -2290,15 +2288,20 @@ public final class Keys {
             case "builder":
             case "building":
             case "direction":
-            case "fort_influencing":
-            case "from_province":
             case "nationalism":
             case "native_ferocity":
             case "native_hostileness":
             case "original_total":
-            case "to":
-            case "to_province":
                 return DataType.LONG;
+
+            case "province":
+            case "location":
+            case "province_id":
+            case "from_province":
+            case "fort_influencing":
+            case "to_province":
+            case "to":
+                return DataType.PROVINCE_ID;
 
             case "next_age_progress":
             case "prosperity":
@@ -2363,11 +2366,11 @@ public final class Keys {
             case "native_size":
             case "original_tax":
             case "hostile_core_creation_cost":
+            case "corruption":
                 return DataType.FLOAT;
 
             case "used_client_names":
             case "players_countries":
-            case "top_power":
             case "top_provinces":
             case "potential_incidents":
             case "\"germanic\"":
@@ -2387,17 +2390,27 @@ public final class Keys {
             case "\"african\"":
             case "\"cushitic\"":
             case "\"evenks\"":
+                return DataType.LIST_STRING;
+
+            case "top_power":
+                return DataType.LIST_TAG;
+
             case "cores":
             case "claims":
-            case "discovered_by":
-                return DataType.LIST_STRING;
+            case "production_leader_tag":
+            case "dynamic_countries":
+            case "electors":
+            case "colony_claim":
+                return DataType.LINE_TAG;
 
             case "setgameplayoptions":
             case "id_counters":
-            case "institution_origin":
             case "possible_provinces":
             case "score_rank":
-                return DataType.LINE_INT;
+                return DataType.LINE_LONG;
+
+            case "institution_origin":
+                return DataType.LINE_PROVINCE_ID;
 
             case "institutions_penalties":
             case "trade_goods_size":
@@ -2405,13 +2418,6 @@ public final class Keys {
             case "top_provinces_values":
             case "tradegoods_total_produced":
                 return DataType.LINE_FLOAT;
-
-            case "production_leader_tag":
-            case "dynamic_countries":
-            case "electors":
-            case "members":
-            case "colony_claim":
-                return DataType.LINE_STRING;
 
             case "has_trader":
             case "has_state_patriach":

@@ -9,6 +9,10 @@ public class ListStringData extends AbstractData<List<String>> {
         super(DataType.LIST_STRING, key, value);
     }
 
+    protected ListStringData(DataType dataType, String key, List<String> value) {
+        super(dataType, key, value);
+    }
+
     @Override
     public String toSave(Integer indent) {
         StringBuilder stringBuilder = new StringBuilder();

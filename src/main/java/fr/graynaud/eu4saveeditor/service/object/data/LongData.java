@@ -6,6 +6,10 @@ public class LongData extends AbstractData<Long> {
         super(DataType.LONG, key, value);
     }
 
+    protected LongData(DataType dataType, String key, Long value) {
+        super(dataType, key, value);
+    }
+
     @Override
     public String toSave(Integer indent) {
         return "\t".repeat(indent) + this.key + "=" + this.value + "\n";

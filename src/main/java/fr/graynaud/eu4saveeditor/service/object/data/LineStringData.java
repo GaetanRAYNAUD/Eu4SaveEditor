@@ -6,7 +6,11 @@ import java.util.Objects;
 public class LineStringData extends AbstractData<List<String>> {
 
     public LineStringData(String key, List<String> value) {
-        super(DataType.LINE_INT, key, value);
+        super(DataType.LINE_STRING, key, value);
+    }
+
+    protected LineStringData(DataType dataType, String key, List<String> value) {
+        super(dataType, key, value);
     }
 
     @Override

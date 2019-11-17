@@ -28,15 +28,23 @@ public class SaveServiceImpl implements SaveService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SaveServiceImpl.class);
 
-    //TODO add TagData extends StringData (default is '---') + ListTagData
+    //Fixme Not parsed end with wrong index ?
+    // "unit_templates": {
+    //      "type": "NOT_PARSED",
+    //      "key": "unit_templates",
+    //      "value": "unit_templates={\n\tid={\n\t\tid=12\n\t\ttype=57\n\t}\n\ttarget_merge_province=1314\n\tunder_construction_queued=1\n\ttarget_unit_id={\n\t\tid=2481\n\t\ttype=54\n\t}\n}"
+    //    },
+    //    "}": {
+    //      "type": "STRING",
+    //      "key": "}",
+    //      "value": null,
+    //      "hasQuotes": false
+    //    },
+
     //TODO Same for all specific data ? (ex: culture, religions, goods, etc..., will be easier to do a dropdown in front)
-    //TODO add ProvinceIdData extends IntData
     //TODO add ProgressData extends FloatData (Front = progress bar)
     //TODO add ListBoolData (ex: buildings)
     //TODO parent key for type to be more accurate ?
-
-    //Fixme institutions not detected as LINE_INT
-    //Fixme dynasty.dynasty not detected as LIST_STRING
 
     @Override
     public DataObject saveToData(MultipartFile multipartFile) throws IOException {
@@ -179,11 +187,17 @@ public class SaveServiceImpl implements SaveService {
             case LONG:
             case FLOAT:
             case BOOL:
+            case TAG:
+            case PROVINCE_ID:
                 String value = content.substring(index, endOfLine).trim();
 
                 switch (type) {
                     case STRING:
                         data = new StringData(key, Utils.formatStringValue(value));
+                        break;
+
+                    case TAG:
+                        data = new TagData(key, Utils.formatStringValue(value));
                         break;
 
                     case DATE:
@@ -201,6 +215,10 @@ public class SaveServiceImpl implements SaveService {
                         data = new LongData(key, Long.valueOf(value));
                         break;
 
+                    case PROVINCE_ID:
+                        data = new ProvinceIdData(key, Long.valueOf(value));
+                        break;
+
                     case FLOAT:
                         data = new FloatData(key, Double.valueOf(value));
                         break;
@@ -214,9 +232,12 @@ public class SaveServiceImpl implements SaveService {
 
             case OBJECT:
             case LIST_STRING:
-            case LINE_INT:
+            case LIST_TAG:
+            case LINE_LONG:
             case LINE_FLOAT:
             case LINE_STRING:
+            case LINE_TAG:
+            case LINE_PROVINCE_ID:
                 if (content.substring(index, index + 2).equals("{\n")) {
                     index += 2;
                 } else if (content.substring(index, index + 1).equals("{")) {
@@ -261,11 +282,26 @@ public class SaveServiceImpl implements SaveService {
                                                              .collect(Collectors.toList()));
                         break;
 
-                    case LINE_INT:
+                    case LIST_TAG:
                         subIndex.set(dataContent.length());
-                        data = new LineIntData(key, Arrays.stream(dataContent.trim().split(" "))
-                                                          .map(Integer::valueOf)
-                                                          .collect(Collectors.toList()));
+                        data = new ListTagData(key, Arrays.stream(dataContent.split("[\r|\n]+"))
+                                                             .map(Utils::formatStringValue)
+                                                             .filter(Objects::nonNull)
+                                                             .collect(Collectors.toList()));
+                        break;
+
+                    case LINE_LONG:
+                        subIndex.set(dataContent.length());
+                        data = new LineLongData(key, Arrays.stream(dataContent.trim().split(" "))
+                                                           .map(Long::valueOf)
+                                                           .collect(Collectors.toList()));
+                        break;
+
+                    case LINE_PROVINCE_ID:
+                        subIndex.set(dataContent.length());
+                        data = new LineProvinceIdData(key, Arrays.stream(dataContent.trim().split(" "))
+                                                           .map(Long::valueOf)
+                                                           .collect(Collectors.toList()));
                         break;
 
                     case LINE_FLOAT:
@@ -276,6 +312,13 @@ public class SaveServiceImpl implements SaveService {
                         break;
 
                     case LINE_STRING:
+                        subIndex.set(dataContent.length());
+                        data = new LineStringData(key, Arrays.stream(dataContent.trim().split(" "))
+                                                             .map(Utils::formatStringValue)
+                                                             .collect(Collectors.toList()));
+                        break;
+
+                    case LINE_TAG:
                         subIndex.set(dataContent.length());
                         data = new LineStringData(key, Arrays.stream(dataContent.trim().split(" "))
                                                              .map(Utils::formatStringValue)
