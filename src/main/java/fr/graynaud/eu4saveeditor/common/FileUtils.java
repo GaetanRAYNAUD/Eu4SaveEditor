@@ -4,9 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -16,24 +14,20 @@ public final class FileUtils {
     private FileUtils() {
     }
 
-    public static Map<SaveFile, String> unZipSave(MultipartFile multipartFile) throws IOException {
-        Map<SaveFile, String> content = new HashMap<>();
+    public static String unZipSave(MultipartFile multipartFile) throws IOException {
 
         try (ZipInputStream zipInputStream = new ZipInputStream(multipartFile.getInputStream())) {
             ZipEntry entry = zipInputStream.getNextEntry();
 
             while (entry != null) {
-                Optional<SaveFile> saveFile = SaveFile.getFromFileName(entry.getName());
-
-                if (!entry.isDirectory() && saveFile.isPresent()) {
-                    content.put(saveFile.get(),
-                                new String(zipInputStream.readNBytes((int) entry.getSize()), "Windows-1252"));
+                if (!entry.isDirectory() && entry.getName().equals("gamestate")) {
+                    return new String(zipInputStream.readNBytes((int) entry.getSize()), "Windows-1252");
                 }
 
                 entry = zipInputStream.getNextEntry();
             }
 
-            return content;
+            return null;
         }
     }
 

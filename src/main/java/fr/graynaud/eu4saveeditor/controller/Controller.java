@@ -25,15 +25,32 @@ public class Controller {
     }
 
     @PostMapping("/parse")
-    public ResponseEntity parse(@RequestPart("save") MultipartFile save) throws IOException {
-        return new ResponseEntity<>(saveService.saveToData(save).setFileName(save.getOriginalFilename()),
-                                    HttpStatus.OK);
+    public ResponseEntity parse(@RequestPart("save") MultipartFile save, HttpServletResponse response) throws IOException {
+        return new ResponseEntity<>(saveService.saveToData(save), HttpStatus.OK);
     }
+
+    /*    @PostMapping("/parse")
+    public void parse(@RequestPart("save") MultipartFile save, HttpServletResponse response) throws IOException {
+        byte[] bytes = new ObjectMapper().writeValueAsBytes(saveService.saveToData(save).setFileName(save.getOriginalFilename()));
+
+        response.setContentType("application/zip");
+        response.setHeader("Content-Disposition", "attachment; filename=data.zip");
+
+        try (ZipOutputStream zos = new ZipOutputStream(response.getOutputStream())) {
+            ZipEntry entry = new ZipEntry("data.json");
+
+            zos.putNextEntry(entry);
+            zos.write(bytes);
+            zos.closeEntry();
+        }
+
+        response.getOutputStream().flush();
+    }*/
 
     @PostMapping(value = "/convert", produces = "application/zip")
     public void convert(@RequestBody DataObject dataObject, HttpServletResponse response) throws IOException {
         response.setContentType("application/zip");
-        response.setHeader("Content-Disposition", "attachment; filename=edited_" + dataObject.getFileName());
+        response.setHeader("Content-Disposition", "attachment; filename=edited_" + "test");
 
         saveService.dataToSave(dataObject, response.getOutputStream());
         response.getOutputStream().flush();

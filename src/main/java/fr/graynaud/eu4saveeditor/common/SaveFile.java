@@ -3,14 +3,11 @@ package fr.graynaud.eu4saveeditor.common;
 import fr.graynaud.eu4saveeditor.service.object.data.DataType;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
 public enum SaveFile {
-    AI("ai", Keys::getTypeAi, Keys::ignoredKeyAIContains),
-    GAMESTATE("gamestate", Keys::getTypeGamestate, Keys::ignoredKeyGamestateContains),
-    META("meta", Keys::getTypeMeta, Keys::ignoredKeyMetaContains);
+    GAMESTATE("gamestate", Keys::getTypeGamestate, Keys::ignoredKeyGamestateContains);
 
     public final String fileName;
 

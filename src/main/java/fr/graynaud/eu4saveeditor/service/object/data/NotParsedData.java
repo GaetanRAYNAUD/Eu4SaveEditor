@@ -1,7 +1,5 @@
 package fr.graynaud.eu4saveeditor.service.object.data;
 
-import fr.graynaud.eu4saveeditor.common.Utils;
-
 public class NotParsedData extends AbstractData<String> {
 
     public NotParsedData(String key, String value) {

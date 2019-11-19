@@ -1,9 +1,6 @@
 package fr.graynaud.eu4saveeditor.service;
 
-import fr.graynaud.eu4saveeditor.common.Constants;
-import fr.graynaud.eu4saveeditor.common.FileUtils;
-import fr.graynaud.eu4saveeditor.common.SaveFile;
-import fr.graynaud.eu4saveeditor.common.Utils;
+import fr.graynaud.eu4saveeditor.common.*;
 import fr.graynaud.eu4saveeditor.controller.object.DataObject;
 import fr.graynaud.eu4saveeditor.service.object.DataIndex;
 import fr.graynaud.eu4saveeditor.service.object.data.*;
@@ -24,22 +21,9 @@ import java.util.stream.Collectors;
 @Service
 public class SaveServiceImpl implements SaveService {
 
-    private static final int MAX_TRY = 10000;
+    private static final int MAX_TRY = 1000000;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SaveServiceImpl.class);
-
-    //Fixme Not parsed end with wrong index ?
-    // "unit_templates": {
-    //      "type": "NOT_PARSED",
-    //      "key": "unit_templates",
-    //      "value": "unit_templates={\n\tid={\n\t\tid=12\n\t\ttype=57\n\t}\n\ttarget_merge_province=1314\n\tunder_construction_queued=1\n\ttarget_unit_id={\n\t\tid=2481\n\t\ttype=54\n\t}\n}"
-    //    },
-    //    "}": {
-    //      "type": "STRING",
-    //      "key": "}",
-    //      "value": null,
-    //      "hasQuotes": false
-    //    },
 
     //TODO Same for all specific data ? (ex: culture, religions, goods, etc..., will be easier to do a dropdown in front)
     //TODO add ProgressData extends FloatData (Front = progress bar)
@@ -48,71 +32,49 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public DataObject saveToData(MultipartFile multipartFile) throws IOException {
-        AtomicInteger attempts = new AtomicInteger();
-        Map<SaveFile, String> filesContent = FileUtils.unZipSave(multipartFile);
-        DataObject dataObject = new DataObject();
+        String content = FileUtils.unZipSave(multipartFile);
 
-        filesContent.forEach((saveFile, content) -> {
-            attempts.set(0);
-            List<AbstractData> data = new ArrayList<>();
+        if (content == null) {
+            return null;
+        }
 
-            if (content.startsWith(Constants.STARTING_TEXT)) {
-                content = content.substring(Constants.STARTING_TEXT.length());
-            }
+        AtomicInteger attempts = new AtomicInteger(0);
+        List<AbstractData> data = new ArrayList<>();
 
-            if (saveFile == SaveFile.GAMESTATE) { //Divided because otherwise the string is too big
-                int indexOfProvinces = content.indexOf("\nprovinces={");
-                int indexOfCountries = content.indexOf("\ncountries={", indexOfProvinces);
-                int indexOfEnd = content.indexOf("\nactive_advisors={", indexOfCountries);
-                String startContent = content.substring(0, indexOfProvinces).trim();
-                String provincesContent = content.substring(indexOfProvinces, indexOfCountries - 1).trim();
-                String countriesContent = content.substring(indexOfCountries, indexOfEnd - 1).trim();
-                String endContent = content.substring(indexOfEnd).trim();
+        if (content.startsWith(Constants.STARTING_TEXT)) {
+            content = content.substring(Constants.STARTING_TEXT.length());
+        }
 
-                data.addAll(readDataOfContent(startContent, attempts, saveFile));
-                data.addAll(readDataOfContent(provincesContent, attempts, saveFile));
-                data.addAll(readDataOfContent(countriesContent, attempts, saveFile));
-                data.addAll(readDataOfContent(endContent, attempts, saveFile));
-            } else {
-                content = content.trim();
+        int indexOfProvinces = content.indexOf("\nprovinces={");
+        int indexOfCountries = content.indexOf("\ncountries={", indexOfProvinces);
+        int indexOfEnd = content.indexOf("\nactive_advisors={", indexOfCountries);
+        String startContent = content.substring(0, indexOfProvinces).trim();
+        String provincesContent = content.substring(indexOfProvinces, indexOfCountries - 1).trim();
+        String countriesContent = content.substring(indexOfCountries, indexOfEnd - 1).trim();
+        String endContent = content.substring(indexOfEnd).trim();
 
-                data.addAll(readDataOfContent(content, attempts, saveFile));
-            }
+        data.addAll(readDataOfContent(startContent, attempts));
+        data.addAll(readDataOfContent(provincesContent, attempts));
+        data.addAll(readDataOfContent(countriesContent, attempts));
+        data.addAll(readDataOfContent(endContent, attempts));
 
-            switch (saveFile) {
-                case AI:
-                    dataObject.setAi(data);
-                    break;
-
-                case META:
-                    dataObject.setMeta(data);
-                    break;
-
-                case GAMESTATE:
-                    dataObject.setGamestate(data);
-                    break;
-            }
-        });
-
-        return dataObject;
+        return new DataObject(data);
     }
 
     @Override
     public void dataToSave(DataObject dataObject, OutputStream outputStream) throws IOException {
         Map<SaveFile, String> map = new HashMap<>();
-        map.put(SaveFile.META, dataObject.getMetaToSave());
-        map.put(SaveFile.AI, dataObject.getAiToSave());
         //        map.put(SaveFile.GAMESTATE, dataObject.getGamestateToSave());
 
         FileUtils.zipData(outputStream, map);
     }
 
-    private List<AbstractData> readDataOfContent(String content, AtomicInteger attempts, SaveFile saveFile) {
+    private List<AbstractData> readDataOfContent(String content, AtomicInteger attempts) {
         int index = 0;
         List<AbstractData> data = new ArrayList<>();
 
         while (index < content.length() && attempts.getAndAdd(1) < MAX_TRY) {
-            DataIndex dataIndex = getValue(content.substring(index), saveFile, attempts);
+            DataIndex dataIndex = getValue(content.substring(index), attempts);
 
             data.add(dataIndex.getData());
             index += dataIndex.getIndex();
@@ -121,7 +83,7 @@ public class SaveServiceImpl implements SaveService {
         return data;
     }
 
-    private DataIndex getValue(String content, SaveFile saveFile, AtomicInteger attempts) {
+    private DataIndex getValue(String content, AtomicInteger attempts) {
         int index = 0;
         int fixIndex = 0;
         if (content.startsWith("}\n") || content.startsWith("{\n")) {
@@ -145,12 +107,13 @@ public class SaveServiceImpl implements SaveService {
 
         String line = content.substring(index, endOfLine);
 
-        if (saveFile.ignoredKeys.apply(line)) {
+        if (Keys.ignoredKeyGamestateContains(line)) {
             int separator = content.indexOf("=", index);
             String key = content.substring(index, content.indexOf("=", index)).trim();
             int length = skipNextObject(content, separator + 1);
 
-            return new DataIndex(separator + length + 1, new NotParsedData(key, content.substring(index, separator + length + 1)));
+            String subContent = content.substring(index, separator + length + 1);
+            return new DataIndex(subContent.length() + fixIndex, new NotParsedData(key, subContent));
         }
 
         if (line.contains("=")) {
@@ -158,8 +121,7 @@ public class SaveServiceImpl implements SaveService {
             String key = content.substring(index, separator).trim();
             index = separator + 1;
 
-            DataIndex dataIndex = manageValue(saveFile.getType.apply(key), content, index, endOfLine, key, saveFile,
-                                              attempts);
+            DataIndex dataIndex = manageValue(Keys.getTypeGamestate(key), content, index, endOfLine, key, attempts);
 
             dataIndex.setIndex(dataIndex.getIndex() + fixIndex);
 
@@ -168,7 +130,7 @@ public class SaveServiceImpl implements SaveService {
 
         if (line.startsWith("map_area_data")) {
             DataIndex dataIndex = manageValue(DataType.OBJECT, content, "map_area_data".length(), endOfLine,
-                                              "map_area_data", saveFile, attempts);
+                                              "map_area_data", attempts);
 
             dataIndex.setIndex(dataIndex.getIndex() + fixIndex);
 
@@ -179,7 +141,7 @@ public class SaveServiceImpl implements SaveService {
     }
 
     private DataIndex manageValue(DataType type, String content, int index, int endOfLine, String key,
-                                  SaveFile saveFile, AtomicInteger attempts) {
+                                  AtomicInteger attempts) {
         AbstractData data = null;
         switch (type) {
             case STRING:
@@ -258,7 +220,7 @@ public class SaveServiceImpl implements SaveService {
                         List<AbstractData> subData = new ArrayList<>();
 
                         while (subIndex.get() < dataContent.trim().length() && attempts.getAndAdd(1) < MAX_TRY) {
-                            DataIndex dataIndex = getValue(dataContent.substring(subIndex.get()), saveFile, attempts);
+                            DataIndex dataIndex = getValue(dataContent.substring(subIndex.get()), attempts);
 
                             subData.add(dataIndex.getData());
 
@@ -285,9 +247,9 @@ public class SaveServiceImpl implements SaveService {
                     case LIST_TAG:
                         subIndex.set(dataContent.length());
                         data = new ListTagData(key, Arrays.stream(dataContent.split("[\r|\n]+"))
-                                                             .map(Utils::formatStringValue)
-                                                             .filter(Objects::nonNull)
-                                                             .collect(Collectors.toList()));
+                                                          .map(Utils::formatStringValue)
+                                                          .filter(Objects::nonNull)
+                                                          .collect(Collectors.toList()));
                         break;
 
                     case LINE_LONG:
@@ -300,8 +262,8 @@ public class SaveServiceImpl implements SaveService {
                     case LINE_PROVINCE_ID:
                         subIndex.set(dataContent.length());
                         data = new LineProvinceIdData(key, Arrays.stream(dataContent.trim().split(" "))
-                                                           .map(Long::valueOf)
-                                                           .collect(Collectors.toList()));
+                                                                 .map(Long::valueOf)
+                                                                 .collect(Collectors.toList()));
                         break;
 
                     case LINE_FLOAT:
@@ -344,7 +306,7 @@ public class SaveServiceImpl implements SaveService {
                           List<AbstractData> subSubData = new ArrayList<>();
 
                           while (subSubIndex < object.trim().length() && attempts.getAndAdd(1) < MAX_TRY) {
-                              DataIndex dataIndex = getValue(object.substring(subSubIndex), saveFile, attempts);
+                              DataIndex dataIndex = getValue(object.substring(subSubIndex), attempts);
 
                               subSubData.add(dataIndex.getData());
                               if (dataIndex.getData().isValueValid()) {
@@ -370,7 +332,7 @@ public class SaveServiceImpl implements SaveService {
                 type = DataType.getType(line);
                 DataIndex dataIndex = manageValue(type, content, content.indexOf("=") + 1,
                                                   content.contains("\n") ? content.indexOf("\n") : content.length(),
-                                                  key, saveFile, attempts);
+                                                  key, attempts);
 
                 data = dataIndex.getData();
                 index = dataIndex.getIndex();
