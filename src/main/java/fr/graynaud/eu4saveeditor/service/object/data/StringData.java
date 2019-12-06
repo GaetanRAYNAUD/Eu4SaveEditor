@@ -1,6 +1,6 @@
 package fr.graynaud.eu4saveeditor.service.object.data;
 
-import fr.graynaud.eu4saveeditor.common.Utils;
+import fr.graynaud.eu4saveeditor.common.ParseUtils;
 
 public class StringData extends AbstractData<String> {
 
@@ -8,12 +8,12 @@ public class StringData extends AbstractData<String> {
 
     public StringData(String key, String value) {
         super(DataType.STRING, key, value);
-        this.hasQuotes = Utils.hasQuotes(value);
+        this.hasQuotes = ParseUtils.hasQuotes(value);
     }
 
     protected StringData(DataType type, String key, String value) {
         super(type, key, value);
-        this.hasQuotes = Utils.hasQuotes(this.value);
+        this.hasQuotes = ParseUtils.hasQuotes(this.value);
     }
 
     public Boolean getHasQuotes() {

@@ -29,24 +29,6 @@ public class Controller {
         return new ResponseEntity<>(saveService.saveToData(save), HttpStatus.OK);
     }
 
-    /*    @PostMapping("/parse")
-    public void parse(@RequestPart("save") MultipartFile save, HttpServletResponse response) throws IOException {
-        byte[] bytes = new ObjectMapper().writeValueAsBytes(saveService.saveToData(save).setFileName(save.getOriginalFilename()));
-
-        response.setContentType("application/zip");
-        response.setHeader("Content-Disposition", "attachment; filename=data.zip");
-
-        try (ZipOutputStream zos = new ZipOutputStream(response.getOutputStream())) {
-            ZipEntry entry = new ZipEntry("data.json");
-
-            zos.putNextEntry(entry);
-            zos.write(bytes);
-            zos.closeEntry();
-        }
-
-        response.getOutputStream().flush();
-    }*/
-
     @PostMapping(value = "/convert", produces = "application/zip")
     public void convert(@RequestBody DataObject dataObject, HttpServletResponse response) throws IOException {
         response.setContentType("application/zip");

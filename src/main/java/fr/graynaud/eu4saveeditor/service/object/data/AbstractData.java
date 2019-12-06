@@ -2,6 +2,7 @@ package fr.graynaud.eu4saveeditor.service.object.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import fr.graynaud.eu4saveeditor.config.jackson.AbstractDataSerializer;
 
 @JsonSerialize(using = AbstractDataSerializer.class)
 public abstract class AbstractData<T> {
@@ -30,6 +31,7 @@ public abstract class AbstractData<T> {
         return key;
     }
 
+    @JsonIgnore
     public DataType getType() {
         return type;
     }

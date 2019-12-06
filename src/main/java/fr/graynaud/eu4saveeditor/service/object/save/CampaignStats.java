@@ -1,6 +1,6 @@
 package fr.graynaud.eu4saveeditor.service.object.save;
 
-import fr.graynaud.eu4saveeditor.service.object.data.FloatData;
+import fr.graynaud.eu4saveeditor.service.object.data.DoubleData;
 import fr.graynaud.eu4saveeditor.service.object.data.LongData;
 import fr.graynaud.eu4saveeditor.service.object.data.StringData;
 
@@ -14,7 +14,7 @@ public class CampaignStats {
 
     private StringData localization;
 
-    private FloatData value;
+    private DoubleData value;
 
     private LongData sampleCount;
 
@@ -50,11 +50,11 @@ public class CampaignStats {
         this.localization = localization;
     }
 
-    public FloatData getValue() {
+    public DoubleData getValue() {
         return value;
     }
 
-    public void setValue(FloatData value) {
+    public void setValue(DoubleData value) {
         this.value = value;
     }
 

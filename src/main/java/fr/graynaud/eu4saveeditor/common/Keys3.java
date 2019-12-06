@@ -2,31 +2,9 @@ package fr.graynaud.eu4saveeditor.common;
 
 import fr.graynaud.eu4saveeditor.service.object.data.DataType;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+public final class Keys3 {
 
-public final class Keys {
-
-    private static final Set<String> GAMESTATE_IGNORED_KEYS = Stream.of("trade={", "unit_templates={",
-                                                                        "used_client_names={", "id_counters={",
-                                                                        "production_leader_tag={",
-                                                                        "dynamic_countries={",
-                                                                        "tradegoods_total_produced={", "dynasty={",
-                                                                        "great_powers={", "income_statistics={",
-                                                                        "nation_size_statistics={",
-                                                                        "score_statistics={", "inflation_statistics={",
-                                                                        "sub_unit={", "active_relations={",
-                                                                        "previous_monarch={", "ai={",
-                                                                        "adm_spent_indexed={", "mil_spent_indexed={",
-                                                                        "opinion_cache={", "inflation_history={",
-                                                                        "ledger={").collect(Collectors.toSet());
-
-    private Keys() {
-    }
-
-    public static Boolean ignoredKeyGamestateContains(String key) {
-        return GAMESTATE_IGNORED_KEYS.contains(key);
+    private Keys3() {
     }
 
     public static DataType getTypeGamestate(String key) {
