@@ -5,7 +5,7 @@ import fr.graynaud.eu4saveeditor.common.ParseUtils;
 import fr.graynaud.eu4saveeditor.service.object.data.LineLongData;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class GameplaySettings implements Parsable {
+public class GameplaySettings extends Eu4Object {
 
     private LineLongData setGameplayOptions;
 
@@ -13,7 +13,7 @@ public class GameplaySettings implements Parsable {
     }
 
     public GameplaySettings(String content) {
-        parse(content);
+        super(content);
     }
 
     public LineLongData getSetGameplayOptions() {

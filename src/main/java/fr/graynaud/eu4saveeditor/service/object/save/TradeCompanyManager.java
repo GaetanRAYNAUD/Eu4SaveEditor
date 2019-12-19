@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-public class TradeCompanyManager implements Parsable {
+public class TradeCompanyManager extends Eu4Object {
 
     private List<TradeCompany> tradeCompanies;
 
@@ -15,7 +15,7 @@ public class TradeCompanyManager implements Parsable {
     }
 
     public TradeCompanyManager(String content) {
-        parse(content);
+        super(content);
     }
 
     public List<TradeCompany> getTradeCompanies() {

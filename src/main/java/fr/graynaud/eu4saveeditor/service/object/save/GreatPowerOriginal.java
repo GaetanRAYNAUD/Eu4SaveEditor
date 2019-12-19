@@ -2,17 +2,12 @@ package fr.graynaud.eu4saveeditor.service.object.save;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import fr.graynaud.eu4saveeditor.common.ParseUtils;
-import fr.graynaud.eu4saveeditor.service.object.data.BoolData;
 import fr.graynaud.eu4saveeditor.service.object.data.DoubleData;
 import fr.graynaud.eu4saveeditor.service.object.data.LongData;
 import fr.graynaud.eu4saveeditor.service.object.data.TagData;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class GreatPowerOriginal implements Parsable {
+public class GreatPowerOriginal extends Eu4Object {
 
     private LongData rank;
 

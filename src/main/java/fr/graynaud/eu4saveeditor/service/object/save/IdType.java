@@ -5,7 +5,7 @@ import fr.graynaud.eu4saveeditor.common.ParseUtils;
 import fr.graynaud.eu4saveeditor.service.object.data.LongData;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class IdType implements Parsable {
+public class IdType extends Eu4Object {
 
     private LongData id;
 
@@ -15,7 +15,7 @@ public class IdType implements Parsable {
     }
 
     public IdType(String content) {
-        this.parse(content);
+        super(content);
     }
 
     public LongData getId() {

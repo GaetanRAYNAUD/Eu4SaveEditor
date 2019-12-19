@@ -2,11 +2,9 @@ package fr.graynaud.eu4saveeditor.service.object.save;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import fr.graynaud.eu4saveeditor.common.ParseUtils;
-import fr.graynaud.eu4saveeditor.service.object.data.*;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import fr.graynaud.eu4saveeditor.service.object.data.BoolData;
+import fr.graynaud.eu4saveeditor.service.object.data.LineTagData;
+import fr.graynaud.eu4saveeditor.service.object.data.LongData;
 
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
 public class Hre extends Empire {
@@ -27,7 +25,7 @@ public class Hre extends Empire {
     }
 
     public Hre(String content) {
-        parse(content);
+        super(content);
     }
 
     public LongData getContinent() {

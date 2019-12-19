@@ -6,7 +6,7 @@ import fr.graynaud.eu4saveeditor.service.object.data.DateData;
 import fr.graynaud.eu4saveeditor.service.object.data.StringData;
 
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-public class Decree implements Parsable {
+public class Decree extends Eu4Object {
 
     private StringData decreeName;
 

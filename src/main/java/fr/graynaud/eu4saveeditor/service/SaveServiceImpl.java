@@ -2,7 +2,6 @@ package fr.graynaud.eu4saveeditor.service;
 
 import fr.graynaud.eu4saveeditor.common.Constants;
 import fr.graynaud.eu4saveeditor.common.FileUtils;
-import fr.graynaud.eu4saveeditor.common.ParseUtils;
 import fr.graynaud.eu4saveeditor.common.SaveFile;
 import fr.graynaud.eu4saveeditor.controller.object.DataObject;
 import fr.graynaud.eu4saveeditor.service.object.save.Gamestate;
@@ -21,10 +20,7 @@ public class SaveServiceImpl implements SaveService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SaveServiceImpl.class);
 
-    //TODO Same for all specific data ? (ex: culture, religions, goods, etc..., will be easier to do a dropdown in front)
-    //TODO add ProgressData extends FloatData (Front = progress bar)
-    //TODO add ListBoolData (ex: buildings)
-    //TODO create type "DuplicatedObjectData" (unit_templates)
+    //Todo a "light" api that does not extract unusable data for edit (ledger, previous wars, combats...)
 
     @Override
     public Gamestate saveToData(MultipartFile multipartFile) throws IOException {

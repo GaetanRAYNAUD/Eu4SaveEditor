@@ -5,7 +5,7 @@ import fr.graynaud.eu4saveeditor.common.ParseUtils;
 import fr.graynaud.eu4saveeditor.service.object.data.ListStringData;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class CultureGroup implements Parsable {
+public class CultureGroup extends Eu4Object {
 
     private ListStringData germanic;
 

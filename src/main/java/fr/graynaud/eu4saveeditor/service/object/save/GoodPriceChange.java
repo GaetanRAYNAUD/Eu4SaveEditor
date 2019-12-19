@@ -7,7 +7,7 @@ import fr.graynaud.eu4saveeditor.service.object.data.DoubleData;
 import fr.graynaud.eu4saveeditor.service.object.data.StringData;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class GoodPriceChange implements Parsable {
+public class GoodPriceChange extends Eu4Object {
 
     private StringData key;
 

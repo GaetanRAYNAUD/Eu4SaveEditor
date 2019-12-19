@@ -6,7 +6,7 @@ import fr.graynaud.eu4saveeditor.service.object.data.LineTagData;
 import fr.graynaud.eu4saveeditor.service.object.data.LongData;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class TradeLeague implements Parsable {
+public class TradeLeague extends Eu4Object {
 
     private LongData id;
 
@@ -16,7 +16,7 @@ public class TradeLeague implements Parsable {
     }
 
     public TradeLeague(String content) {
-        parse(content);
+        super(content);
     }
 
     public LongData getId() {

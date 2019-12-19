@@ -1,6 +1,5 @@
 package fr.graynaud.eu4saveeditor.service.object.save;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.graynaud.eu4saveeditor.common.ParseUtils;
 import fr.graynaud.eu4saveeditor.service.object.data.AbstractData;
@@ -12,7 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @JsonSerialize(using = SimpleMapSerializer.class)
-public class Flags extends SimpleMap<DateData> implements Parsable {
+public class Flags extends SimpleMap<DateData> {
 
     private Map<String, DateData> flags;
 
@@ -20,7 +19,7 @@ public class Flags extends SimpleMap<DateData> implements Parsable {
     }
 
     public Flags(String content) {
-        parse(content);
+        super(content);
     }
 
     public Map<String, DateData> getFlags() {

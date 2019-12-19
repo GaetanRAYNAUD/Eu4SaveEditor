@@ -2,12 +2,11 @@ package fr.graynaud.eu4saveeditor.service.object.save;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import fr.graynaud.eu4saveeditor.common.ParseUtils;
-import fr.graynaud.eu4saveeditor.service.object.data.LineLongData;
 import fr.graynaud.eu4saveeditor.service.object.data.ProvinceIdData;
 import fr.graynaud.eu4saveeditor.service.object.data.StringData;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class SavedEventTarget implements Parsable {
+public class SavedEventTarget extends Eu4Object {
 
     private ProvinceIdData province;
 
@@ -17,7 +16,7 @@ public class SavedEventTarget implements Parsable {
     }
 
     public SavedEventTarget(String content) {
-        parse(content);
+        super(content);
     }
 
     public ProvinceIdData getProvince() {

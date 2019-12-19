@@ -5,7 +5,7 @@ import fr.graynaud.eu4saveeditor.common.ParseUtils;
 import fr.graynaud.eu4saveeditor.service.object.data.*;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class RebelFaction implements Parsable {
+public class RebelFaction extends Eu4Object {
 
     private IdType id = new IdType();
 
@@ -41,7 +41,7 @@ public class RebelFaction implements Parsable {
     }
 
     public RebelFaction(String content) {
-        parse(content);
+        super(content);
     }
 
     public IdType getId() {

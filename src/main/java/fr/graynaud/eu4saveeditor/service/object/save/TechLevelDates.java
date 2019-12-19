@@ -3,30 +3,24 @@ package fr.graynaud.eu4saveeditor.service.object.save;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import fr.graynaud.eu4saveeditor.common.ParseUtils;
 import fr.graynaud.eu4saveeditor.service.object.data.DateData;
-import fr.graynaud.eu4saveeditor.service.object.data.LineTagData;
-import fr.graynaud.eu4saveeditor.service.object.data.LongData;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class TechLevelDates implements Parsable {
+public class TechLevelDates extends Eu4Object {
 
-    private Map<Integer, DateData> adm = new HashMap<>();
+    private Map<Integer, DateData> adm;
 
-    private Map<Integer, DateData> dip = new HashMap<>();
+    private Map<Integer, DateData> dip;
 
-    private Map<Integer, DateData> mil = new HashMap<>();
+    private Map<Integer, DateData> mil;
 
     public TechLevelDates() {
     }
 
     public TechLevelDates(String content) {
-        this.parse(content);
+        super(content);
     }
 
     public Map<Integer, DateData> getAdm() {
@@ -60,8 +54,8 @@ public class TechLevelDates implements Parsable {
         String admLevel = datas.get(0).split("=")[0];
         String dipLevel = datas.get(1).split("=")[0];
         String milLevel = datas.get(2).split("=")[0];
-        this.adm.put(Integer.valueOf(admLevel.replace("\"", "")), ParseUtils.parseDateData(datas.get(0), admLevel));
-        this.dip.put(Integer.valueOf(dipLevel.replace("\"", "")), ParseUtils.parseDateData(datas.get(1), dipLevel));
-        this.mil.put(Integer.valueOf(milLevel.replace("\"", "")), ParseUtils.parseDateData(datas.get(2), milLevel));
+        this.adm = Collections.singletonMap(Integer.valueOf(admLevel.replace("\"", "")), ParseUtils.parseDateData(datas.get(0), admLevel));
+        this.dip = Collections.singletonMap(Integer.valueOf(dipLevel.replace("\"", "")), ParseUtils.parseDateData(datas.get(1), dipLevel));
+        this.mil = Collections.singletonMap(Integer.valueOf(milLevel.replace("\"", "")), ParseUtils.parseDateData(datas.get(2), milLevel));
     }
 }

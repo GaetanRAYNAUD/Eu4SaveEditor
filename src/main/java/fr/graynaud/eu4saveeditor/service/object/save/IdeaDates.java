@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @JsonSerialize(using = SimpleMapSerializer.class)
-public class IdeaDates extends SimpleMap<DateData> implements Parsable {
+public class IdeaDates extends SimpleMap<DateData> {
 
     private Map<String, DateData> ideaDates;
 
@@ -19,7 +19,7 @@ public class IdeaDates extends SimpleMap<DateData> implements Parsable {
     }
 
     public IdeaDates(String content) {
-        parse(content);
+        super(content);
     }
 
     public Map<String, DateData> getFlags() {

@@ -8,17 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-public class FiredEvents implements Parsable {
+public class FiredEvents extends Eu4Object {
 
-    private List<StringData> stringEvents = new ArrayList<>();
+    private List<StringData> stringEvents;
 
-    private List<IdType> idTypeEvents = new ArrayList<>();
+    private List<IdType> idTypeEvents;
 
     public FiredEvents() {
     }
 
     public FiredEvents(String content) {
-        parse(content);
+        super(content);
     }
 
     public List<StringData> getStringEvents() {
@@ -42,6 +42,8 @@ public class FiredEvents implements Parsable {
         content = ParseUtils.getNextObject(content, content.indexOf("\nfired_events={") + 1);
         List<String> events = ParseUtils.getListSameObject(content, "\n\tid=");
 
+        idTypeEvents = new ArrayList<>();
+        stringEvents = new ArrayList<>();
         events.forEach(s -> {
             if (s.contains("id={")) {
                 idTypeEvents.add(new IdType(s.substring(s.indexOf("id={") + 1)));

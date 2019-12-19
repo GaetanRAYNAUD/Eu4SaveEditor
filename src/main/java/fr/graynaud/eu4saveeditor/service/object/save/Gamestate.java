@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Gamestate implements Parsable {
+public class Gamestate extends Eu4Object {
 
     private ListStringData playersCountries;
 
@@ -92,23 +92,23 @@ public class Gamestate implements Parsable {
 
     private ObjectData countries;
 
-    private ObjectData activeAdvisors;
+    private ActiveAdvisors activeAdvisors;
 
-    private ObjectData diplomacy;
+    private Diplomacy diplomacy;
 
-    private ObjectData combat;
+    private Combat combat;
 
-    private ObjectData activeWar;
+    private List<War> activeWars;
 
-    private ObjectData previousWar;
+    private List<War> previousWars;
 
-    private NotParsedData incomeStatistics;
+    private LedgerStatistics incomeStatistics;
 
-    private NotParsedData nationSizeStatistics;
+    private LedgerStatistics nationSizeStatistics;
 
-    private NotParsedData scoreStatistics;
+    private LedgerStatistics scoreStatistics;
 
-    private NotParsedData inflationStatistics;
+    private LedgerStatistics inflationStatistics;
 
     private AutoFleetTransport autoFleetTransport;
 
@@ -456,75 +456,75 @@ public class Gamestate implements Parsable {
         this.countries = countries;
     }
 
-    public ObjectData getActiveAdvisors() {
+    public ActiveAdvisors getActiveAdvisors() {
         return activeAdvisors;
     }
 
-    public void setActiveAdvisors(ObjectData activeAdvisors) {
+    public void setActiveAdvisors(ActiveAdvisors activeAdvisors) {
         this.activeAdvisors = activeAdvisors;
     }
 
-    public ObjectData getDiplomacy() {
+    public Diplomacy getDiplomacy() {
         return diplomacy;
     }
 
-    public void setDiplomacy(ObjectData diplomacy) {
+    public void setDiplomacy(Diplomacy diplomacy) {
         this.diplomacy = diplomacy;
     }
 
-    public ObjectData getCombat() {
+    public Combat getCombat() {
         return combat;
     }
 
-    public void setCombat(ObjectData combat) {
+    public void setCombat(Combat combat) {
         this.combat = combat;
     }
 
-    public ObjectData getActiveWar() {
-        return activeWar;
+    public List<War> getActiveWars() {
+        return activeWars;
     }
 
-    public void setActiveWar(ObjectData activeWar) {
-        this.activeWar = activeWar;
+    public void setActiveWars(List<War> activeWars) {
+        this.activeWars = activeWars;
     }
 
-    public ObjectData getPreviousWar() {
-        return previousWar;
+    public List<War> getPreviousWars() {
+        return previousWars;
     }
 
-    public void setPreviousWar(ObjectData previousWar) {
-        this.previousWar = previousWar;
+    public void setPreviousWars(List<War> previousWars) {
+        this.previousWars = previousWars;
     }
 
-    public NotParsedData getIncomeStatistics() {
+    public LedgerStatistics getIncomeStatistics() {
         return incomeStatistics;
     }
 
-    public void setIncomeStatistics(NotParsedData incomeStatistics) {
+    public void setIncomeStatistics(LedgerStatistics incomeStatistics) {
         this.incomeStatistics = incomeStatistics;
     }
 
-    public NotParsedData getNationSizeStatistics() {
+    public LedgerStatistics getNationSizeStatistics() {
         return nationSizeStatistics;
     }
 
-    public void setNationSizeStatistics(NotParsedData nationSizeStatistics) {
+    public void setNationSizeStatistics(LedgerStatistics nationSizeStatistics) {
         this.nationSizeStatistics = nationSizeStatistics;
     }
 
-    public NotParsedData getScoreStatistics() {
+    public LedgerStatistics getScoreStatistics() {
         return scoreStatistics;
     }
 
-    public void setScoreStatistics(NotParsedData scoreStatistics) {
+    public void setScoreStatistics(LedgerStatistics scoreStatistics) {
         this.scoreStatistics = scoreStatistics;
     }
 
-    public NotParsedData getInflationStatistics() {
+    public LedgerStatistics getInflationStatistics() {
         return inflationStatistics;
     }
 
-    public void setInflationStatistics(NotParsedData inflationStatistics) {
+    public void setInflationStatistics(LedgerStatistics inflationStatistics) {
         this.inflationStatistics = inflationStatistics;
     }
 
@@ -663,15 +663,25 @@ public class Gamestate implements Parsable {
         this.pendingEvents = new PendingEvents(startContent);
         //        this.provinces = ParseUtils.parseObjectData(startContent, "");
         //        this.countries = ParseUtils.parseObjectData(startContent, "");
-        //        this.activeAdvisors = ParseUtils.parseObjectData(startContent, "");
-        //        this.diplomacy = ParseUtils.parseObjectData(startContent, "");
-        //        this.combat = ParseUtils.parseObjectData(startContent, "");
-        //        this.activeWar = ParseUtils.parseObjectData(startContent, "");
-        //        this.previousWar = ParseUtils.parseObjectData(startContent, "");
-        //        this.incomeStatistics = ParseUtils.parseNotParsedData(startContent, "");
-        //        this.nationSizeStatistics = ParseUtils.parseNotParsedData(startContent, "");
-        //        this.scoreStatistics = ParseUtils.parseNotParsedData(startContent, "");
-        //        this.inflationStatistics = ParseUtils.parseNotParsedData(startContent, "");
+        this.activeAdvisors = new ActiveAdvisors(endContent);
+        this.diplomacy = new Diplomacy(endContent);
+        this.combat = new Combat(endContent);
+        this.activeWars = ParseUtils.getListSameObject(endContent, "\nactive_war={")
+                                    .stream()
+                                    .map(War::new)
+                                    .collect(Collectors.toList());
+        this.previousWars = ParseUtils.getListSameObject(endContent, "\nprevious_war={")
+                                     .stream()
+                                     .map(War::new)
+                                     .collect(Collectors.toList());
+        this.incomeStatistics = new LedgerStatistics(
+                ParseUtils.getNextObject(endContent, endContent.indexOf("income_statistics")));
+        this.nationSizeStatistics = new LedgerStatistics(
+                ParseUtils.getNextObject(endContent, endContent.indexOf("nation_size_statistics")));
+        this.scoreStatistics = new LedgerStatistics(
+                ParseUtils.getNextObject(endContent, endContent.indexOf("score_statistics")));
+        this.inflationStatistics = new LedgerStatistics(
+                ParseUtils.getNextObject(endContent, endContent.indexOf("inflation_statistics")));
         this.autoFleetTransport = new AutoFleetTransport(endContent);
         this.expandedDipActionGroups = ParseUtils.parseLineLongData(endContent, "expanded_dip_action_groups");
         //        this.selectionGroups = ParseUtils.parseNotParsedData(startContent, "");

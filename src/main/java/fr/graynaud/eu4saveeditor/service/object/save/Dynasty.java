@@ -5,7 +5,7 @@ import fr.graynaud.eu4saveeditor.common.ParseUtils;
 import fr.graynaud.eu4saveeditor.service.object.data.ListStringData;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Dynasty implements Parsable {
+public class Dynasty extends Eu4Object {
 
     private ListStringData dynasty;
 
@@ -15,7 +15,7 @@ public class Dynasty implements Parsable {
     }
 
     public Dynasty(String content) {
-        parse(content);
+        super(content);
     }
 
     public ListStringData getDynasty() {

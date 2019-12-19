@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-public class AutoFleetTransport implements Parsable {
+public class AutoFleetTransport extends Eu4Object {
 
     private ProvinceIdData target;
 
@@ -18,7 +18,7 @@ public class AutoFleetTransport implements Parsable {
     }
 
     public AutoFleetTransport(String content) {
-        parse(content);
+        super(content);
     }
 
     public ProvinceIdData getTarget() {

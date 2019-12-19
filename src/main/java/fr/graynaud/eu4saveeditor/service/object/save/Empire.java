@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-public abstract class Empire implements Parsable {
+public abstract class Empire extends Eu4Object {
 
     private TagData emperor;
 
@@ -19,6 +19,13 @@ public abstract class Empire implements Parsable {
     private LongData reformLevel;
 
     private List<Emperor> oldEmperors;
+
+    public Empire() {
+    }
+
+    public Empire(String content) {
+        super(content);
+    }
 
     public TagData getEmperor() {
         return emperor;
@@ -57,10 +64,9 @@ public abstract class Empire implements Parsable {
         this.emperor = ParseUtils.parseTagData(content, "emperor");
         this.imperialInfluence = ParseUtils.parseDoubleData(content, "imperial_influence");
         this.reformLevel = ParseUtils.parseLongData(content, "reform_level");
-        this.oldEmperors = ParseUtils.getListSameObject(content, "old_emperor").stream().map(s -> {
-            Emperor emperor = new Emperor();
-            emperor.parse(s);
-            return emperor;
-        }).collect(Collectors.toList());
+        this.oldEmperors = ParseUtils.getListSameObject(content, "old_emperor")
+                                     .stream()
+                                     .map(Emperor::new)
+                                     .collect(Collectors.toList());
     }
 }

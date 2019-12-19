@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import fr.graynaud.eu4saveeditor.common.ParseUtils;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class ChangePrice implements Parsable {
+public class ChangePrice extends Eu4Object {
 
     private GoodPrice noGoods;
 
@@ -74,7 +74,7 @@ public class ChangePrice implements Parsable {
     }
 
     public ChangePrice(String content) {
-        parse(content);
+        super(content);
     }
 
     public GoodPrice getNoGoods() {

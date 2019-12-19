@@ -2,6 +2,7 @@ package fr.graynaud.eu4saveeditor.controller;
 
 import fr.graynaud.eu4saveeditor.controller.object.DataObject;
 import fr.graynaud.eu4saveeditor.service.SaveService;
+import fr.graynaud.eu4saveeditor.service.object.save.Gamestate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class Controller {
     }
 
     @PostMapping("/parse")
-    public ResponseEntity parse(@RequestPart("save") MultipartFile save, HttpServletResponse response) throws IOException {
+    public ResponseEntity<Gamestate> parse(@RequestPart("save") MultipartFile save) throws IOException {
         return new ResponseEntity<>(saveService.saveToData(save), HttpStatus.OK);
     }
 

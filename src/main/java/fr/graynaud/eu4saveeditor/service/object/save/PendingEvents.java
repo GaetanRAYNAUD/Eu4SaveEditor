@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @JsonSerialize(using = SimpleMapSerializer.class)
-public class PendingEvents extends SimpleMap<List<PendingEvent>> implements Parsable {
+public class PendingEvents extends SimpleMap<List<PendingEvent>> {
 
     private Map<String, List<PendingEvent>> pendingEvents;
 
@@ -18,7 +18,7 @@ public class PendingEvents extends SimpleMap<List<PendingEvent>> implements Pars
     }
 
     public PendingEvents(String content) {
-        parse(content);
+        super(content);
     }
 
     public Map<String, List<PendingEvent>> getPendingEvents() {

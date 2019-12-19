@@ -12,7 +12,7 @@ public class CelestialEmpire extends Empire {
     }
 
     public CelestialEmpire(String content) {
-        parse(content);
+        super(content);
     }
 
     public Decree getDecree() {

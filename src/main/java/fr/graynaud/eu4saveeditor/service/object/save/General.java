@@ -8,7 +8,7 @@ import fr.graynaud.eu4saveeditor.service.object.data.StringData;
 import fr.graynaud.eu4saveeditor.service.object.data.TagData;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class General implements Parsable {
+public class General extends Eu4Object {
 
     private StringData name;
 

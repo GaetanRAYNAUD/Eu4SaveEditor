@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import fr.graynaud.eu4saveeditor.common.ParseUtils;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Religions implements Parsable {
+public class Religions extends Eu4Object {
 
     private Religion noReligion;
 
@@ -64,7 +64,7 @@ public class Religions implements Parsable {
     }
 
     public Religions(String content) {
-        parse(content);
+        super(content);
     }
 
     public Religion getNoReligion() {

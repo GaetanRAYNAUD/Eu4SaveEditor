@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-public class PendingEvent implements Parsable {
+public class PendingEvent extends Eu4Object {
 
     private String key;
 
@@ -89,7 +89,7 @@ public class PendingEvent implements Parsable {
         this.random = ParseUtils.parseLongData(content, "random");
 
         List<String> savedEvents = ParseUtils.getListObject(content, "saved_event_target");
-        if (savedEvents != null) {
+        if (savedEvents != null && !savedEvents.isEmpty()) {
             this.savedEventTarget = savedEvents.stream()
                                                .filter(Objects::nonNull)
                                                .map(SavedEventTarget::new)

@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class GoodPrice implements Parsable {
+public class GoodPrice extends Eu4Object {
 
     private DoubleData currentPrice;
 
@@ -42,7 +42,7 @@ public class GoodPrice implements Parsable {
     public void parse(String content) {
         this.currentPrice = ParseUtils.parseDoubleData(content, "current_price");
         List<String> changePrices = ParseUtils.getListSameObject(content, "change_price");
-        if (changePrices != null) {
+        if (changePrices != null && !changePrices.isEmpty()) {
             this.changePrice = changePrices.stream()
                                            .filter(Objects::nonNull)
                                            .map(GoodPriceChange::new)

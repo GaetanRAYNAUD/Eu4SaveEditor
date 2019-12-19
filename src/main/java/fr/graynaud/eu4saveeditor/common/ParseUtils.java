@@ -180,7 +180,7 @@ public final class ParseUtils {
 
     public static List<String> getCleanListString(String content, String key) {
         int keyIndex = content.indexOf(key + "={");
-        List<String> value = null;
+        List<String> value = new ArrayList<>();
 
         if (keyIndex >= 0) {
             keyIndex += key.length() + 2;
@@ -201,7 +201,7 @@ public final class ParseUtils {
 
     public static List<String> getListObject(String content, String key) {
         int keyIndex = content.indexOf(key + "={");
-        List<String> value = null;
+        List<String> value = new ArrayList<>();
 
         if (keyIndex >= 0) {
             keyIndex += key.length() + 2;
@@ -226,7 +226,7 @@ public final class ParseUtils {
     }
 
     public static List<String> getListSameObject(String content, String key) {
-        List<String> value = null;
+        List<String> value = new ArrayList<>();
 
         if (content.contains(key)) {
             value = Arrays.stream(content.split(Pattern.quote(key)))

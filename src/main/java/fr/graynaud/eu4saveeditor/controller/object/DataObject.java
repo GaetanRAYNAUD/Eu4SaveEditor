@@ -1,7 +1,6 @@
 package fr.graynaud.eu4saveeditor.controller.object;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.graynaud.eu4saveeditor.common.Constants;
 import fr.graynaud.eu4saveeditor.config.jackson.DataObjectSerializer;

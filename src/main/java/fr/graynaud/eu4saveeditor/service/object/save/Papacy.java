@@ -6,7 +6,7 @@ import fr.graynaud.eu4saveeditor.service.object.data.LongData;
 import fr.graynaud.eu4saveeditor.service.object.data.TagData;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Papacy implements Parsable {
+public class Papacy extends Eu4Object {
 
     private TagData papalState;
 

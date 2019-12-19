@@ -5,7 +5,7 @@ import fr.graynaud.eu4saveeditor.common.ParseUtils;
 import fr.graynaud.eu4saveeditor.service.object.data.*;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class TradeCompany implements Parsable {
+public class TradeCompany extends Eu4Object {
 
     private StringData name;
 
